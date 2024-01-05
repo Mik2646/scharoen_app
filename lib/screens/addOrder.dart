@@ -19,6 +19,19 @@ class _addOrderState extends State<addOrder> {
             padding: const EdgeInsets.all(20.0),
             child: Addorder(),
           ),
+          Container(
+              width: 60.0, // กำหนดความกว้างของปุ่ม
+          
+            child: ElevatedButton(
+                      onPressed: () {
+                        print("ควย");
+                        setState(() {
+                          // counter++;
+                        });
+                      },
+                      child: Icon(Icons.add),
+                    ),
+          ),
         ],
       ),
     );
