@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '667066355721',
     projectId: 'scharoen-app',
     authDomain: 'scharoen-app.firebaseapp.com',
+    databaseURL: 'https://scharoen-app-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'scharoen-app.appspot.com',
     measurementId: 'G-J8KH94MEYF',
   );
@@ -58,16 +59,18 @@ class DefaultFirebaseOptions {
     appId: '1:667066355721:android:f0da3a53395d517c6b28d8',
     messagingSenderId: '667066355721',
     projectId: 'scharoen-app',
+    databaseURL: 'https://scharoen-app-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'scharoen-app.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCGSk-OWe5GMsKehPN6gVbitbFAy27aDbc',
-    appId: '1:667066355721:ios:c75ad85014176e366b28d8',
+    appId: '1:667066355721:ios:62475eda755132336b28d8',
     messagingSenderId: '667066355721',
     projectId: 'scharoen-app',
+    databaseURL: 'https://scharoen-app-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'scharoen-app.appspot.com',
-    iosBundleId: 'com.example.scharoenApp',
+    iosBundleId: 'mik.com',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -75,6 +78,7 @@ class DefaultFirebaseOptions {
     appId: '1:667066355721:ios:366cf30e6e239f366b28d8',
     messagingSenderId: '667066355721',
     projectId: 'scharoen-app',
+    databaseURL: 'https://scharoen-app-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'scharoen-app.appspot.com',
     iosBundleId: 'com.example.scharoenApp.RunnerTests',
   );

@@ -1,15 +1,16 @@
 {
   "project_info": {
     "project_number": "667066355721",
+    "firebase_url": "https://scharoen-app-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "scharoen-app",
     "storage_bucket": "scharoen-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:667066355721:android:f0da3a53395d517c6b28d8",
+        "mobilesdk_app_id": "1:667066355721:android:02203b0f7b5ecce96b28d8",
         "android_client_info": {
-          "package_name": "com.example.scharoen_app"
+          "package_name": "com.example.scharoenapp"
         }
       },
       "oauth_client": [],
