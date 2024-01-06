@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 
 import 'package:scharoen_app/screens/auth.dart';
 
+
 import 'firebase_options.dart';
 
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(); // ตรวจสอบที่นี่
   runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   @override
@@ -54,7 +55,13 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
+
+        child: Column (
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+
           Image.asset("images/logoscaroen.png"),
           CircularProgressIndicator()
         ]),
