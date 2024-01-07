@@ -29,6 +29,43 @@ class _HomepageState extends State<Homepage> {
   bool isSwitchOn = false;
   String? orderId;
   String? counts = "1000";
+  CollectionReference user = FirebaseFirestore.instance.collection("employee");
+  Employee employees = Employee();
+  String? fullname;
+  void updateStatus(bool? status) async {
+    User? currentUser = _auth.currentUser;
+    if (currentUser != null) {
+      await user
+          .where("email", isEqualTo: currentUser.email)
+          .get()
+          .then((value) {
+        for (var element in value.docs) {
+          setState(() {
+            fullname = "${element['name']} ${element['lastname']}";
+          });
+          user.doc(element.id).update({"status": status});
+        }
+      });
+    }
+  }
+
+  void getUser() async {
+    User? currentUser = _auth.currentUser;
+    if (currentUser != null) {
+      await user
+          .where("email", isEqualTo: currentUser.email)
+          .get()
+          .then((value) {
+        for (var element in value.docs) {
+          print(element['name']);
+          setState(() {
+            fullname = "${element['name']} ${element['lastname']}";
+          });
+        }
+      });
+    }
+  }
+
   Future addOrderId() async {
     await FirebaseFirestore.instance
         .collection("oder_item")
@@ -38,13 +75,17 @@ class _HomepageState extends State<Homepage> {
         orderId = "$counts${value.size}";
       });
     });
-    await FirebaseFirestore.instance
-        .collection("oder_item")
-        .add({"id": "$orderId"});
+    await FirebaseFirestore.instance.collection("oder_item").add({
+      "id": "$orderId",
+      "date": FieldValue.serverTimestamp(),
+      "orderitem_status": "pendding",
+      "create_by": fullname
+    });
   }
 
   void initState() {
     super.initState();
+    getUser();
   }
 
   @override
@@ -207,7 +248,9 @@ class _HomepageState extends State<Homepage> {
                   context,
                   MaterialPageRoute(builder: (context) {
                     addOrderId();
-                    return addOrder(orderIds: orderId);
+                    return addOrder(
+                      orderIds: orderId,
+                    );
                   }),
                 );
               },
@@ -257,6 +300,7 @@ class _HomepageState extends State<Homepage> {
             setState(() {
               isSwitchOn = value;
             });
+            updateStatus(isSwitchOn);
           }),
     );
   }
