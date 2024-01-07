@@ -25,7 +25,7 @@ class Ordermanufacture {
   static Ordermanufacture instance = Ordermanufacture._();
   Ordermanufacture._();
 
-  Stream<List<Orderalls>> getordermanufacture() {
+  Stream<List<Orderitem>> getordermanufacture() {
     final reference = FirebaseFirestore.instance.collection('oder_item');
 
     Query query = reference.where('orderitem_status', whereIn: ['pending']);
@@ -34,7 +34,7 @@ class Ordermanufacture {
 
     return Snapshot.map((Snapshot) {
       return Snapshot.docs.map((doc) {
-        return Orderalls.fromMap(doc.data() as Map<String, dynamic>?);
+        return Orderitem.fromMap(doc.data() as Map<String, dynamic>?);
       }).toList();
     });
   }

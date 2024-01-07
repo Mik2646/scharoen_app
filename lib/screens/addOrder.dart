@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:scharoen_app/screens/auth.dart';
 import 'package:scharoen_app/widget/addOrder.dart';
 
 class addOrder extends StatefulWidget {
@@ -13,6 +14,7 @@ class addOrder extends StatefulWidget {
 class _addOrderState extends State<addOrder> {
   int amount = 1;
   int amountcover = 1;
+
   @override
   Widget build(BuildContext context) {
     List<Addroof> addorders = List.generate(
@@ -95,9 +97,52 @@ class _addOrderState extends State<addOrder> {
                   InkWell(
                     child: ElevatedButton(
                       onPressed: () async {
-                        for (var i = 0; i < addorders.length; i++) {
-                          await addorderFirebase(addorders[i]);
-                        }
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('ยืนยันการเพิ่มออเดอร์'),
+                              content: Text(
+                                  'คุณต้องการยืนยันการเพิ่มออเดอร์หรือไม่?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                  },
+                                  child: Text('ยกเลิก'),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                   
+                                    for (var i = 0; i < addorders.length; i++) {
+                                      await addorderFirebase(addorders[i]);
+                                    }
+                                     Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('เพิ่มออเดอร์สำเร็จ'),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 104, 255, 53),
+                                      ),
+                                    );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              Authenticationsceen()),
+                                    );
+                                  },
+                                  child: Text('ยืนยัน'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        // for (var i = 0; i < addorders.length; i++) {
+                        //   await addorderFirebase(addorders[i]);
+                        // }
                       },
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all(
@@ -166,6 +211,18 @@ class Addroof extends StatefulWidget {
   TextEditingController? _amount_roofController = TextEditingController();
   TextEditingController? _note_roofController = TextEditingController();
   String status = 'pending';
+  bool validateFields() {
+    if (_colorroofController!.text.isEmpty ||
+        _brand_roofController!.text.isEmpty ||
+        _typeroofController!.text.isEmpty ||
+        _length_roofController!.text.isEmpty ||
+        _size_roofController!.text.isEmpty ||
+        _amount_roofController!.text.isEmpty ||
+        _note_roofController!.text.isEmpty) {
+      return false;
+    }
+    return true;
+  }
 
   List<String> typeroof = ['นอก', 'จิงโจ้', 'บลูสโคป'];
   List<String> colorroof = ['สีซิงค์', 'สีน้ำเงิน', 'สีเเดงมั่งมี'];
@@ -424,6 +481,51 @@ class _AddorderState extends State<Addroof> {
       ),
     );
   }
+}
+
+void _showaddorderDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        // title: Text('Forgot Password?'),
+        // content: Text('โปรดติดต่อผู้ดูเเลระบบเพื่อเเก้ไขรหัสผ่านนะครับ .'),
+
+        actions: <Widget>[
+          Column(
+            children: [
+              // IconButton(
+              //     icon: Icon(Icons.menu),
+              //     onPressed: () {
+              //       Navigator.pop(context);
+              //     },
+              //   ),
+              SizedBox(
+                height: 80,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "images/forgotpassword.png",
+                    color: Colors.grey,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 80,
+              ),
+              Text('โปรดติดต่อผู้ดูเเลระบบเพื่อเเก้ไขรหัสผ่าน .'),
+            ],
+          ),
+        ],
+      );
+    },
+  );
 }
 // }
 // class AddCover extends StatefulWidget {

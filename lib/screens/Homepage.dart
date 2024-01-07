@@ -28,7 +28,7 @@ class _HomepageState extends State<Homepage> {
   int employeeCount = 10;
   bool isSwitchOn = false;
   String? orderId;
-  String? counts = "1000";
+  String? counts = "000";
   CollectionReference user = FirebaseFirestore.instance.collection("employee");
   Employee employees = Employee();
   String? fullname;
@@ -78,7 +78,7 @@ class _HomepageState extends State<Homepage> {
     await FirebaseFirestore.instance.collection("oder_item").add({
       "id": "$orderId",
       "date": FieldValue.serverTimestamp(),
-      "orderitem_status": "pendding",
+      "orderitem_status": "pending",
       "create_by": fullname
     });
   }
@@ -126,7 +126,7 @@ class _HomepageState extends State<Homepage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _auth.currentUser!.email.toString(),
+                fullname!,
                   style: TextStyle(
                     fontSize: 14,
                   ),
@@ -196,7 +196,7 @@ class _HomepageState extends State<Homepage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        _auth.currentUser!.email.toString(),
+                       fullname!,
                         style: TextStyle(fontSize: 15),
                       ),
                       Text(
@@ -265,14 +265,18 @@ class _HomepageState extends State<Homepage> {
           ],
         ),
       ),
-      body: Padding(
+      body:Padding(
         padding: const EdgeInsets.all(18.0),
-        child: StreamBuilder<Object>(
-            stream: null,
-            builder: (context, snapshot) {
-              return ordermanufacture();
-            }),
+        child: ordermanufacture(),
       ),
+      //  Padding(
+      //   padding: const EdgeInsets.all(18.0),
+      //   child: StreamBuilder<Object>(
+      //       stream: null,
+      //       builder: (context, snapshot) {
+      //         return ordermanufacture();
+      //       }),
+      // ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         onPressed: () {
@@ -292,7 +296,7 @@ class _HomepageState extends State<Homepage> {
           size: 40,
         ), // ไอคอนบวก
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
       bottomNavigationBar: BottomMenu(
           bottomMenuEmployeeCount: employeeCount,
           isSwitchOn: isSwitchOn,

@@ -1,16 +1,14 @@
 
 class Orderitem {
   String? id;
-  String? employee_id;
-  String? order_id;
-  DateTime? orderitem_created;
+  String? create_by;
+  // DateTime? date;
   String? orderitem_status;
 
   Orderitem({
     required this.id,
-    required this.employee_id,
-    required this.order_id,
-    required this.orderitem_created,
+    required this.create_by,
+    // required this.date,
     required this.orderitem_status
   });
 
@@ -18,9 +16,8 @@ class Orderitem {
     if (oder_item == null) {
       return Orderitem(
         id: null,
-        employee_id: null,
-        order_id: null,
-        orderitem_created: null,
+        create_by: null,
+        // date: null,
         orderitem_status: null,
       
       );
@@ -28,9 +25,10 @@ class Orderitem {
 
     return Orderitem(
       id: oder_item['id'],
-      employee_id: oder_item['employee_id'],
-      order_id: oder_item['order_id'],
-      orderitem_created: oder_item['orderitem_created'],
+      create_by: oder_item['create_by'],
+      // date: oder_item['date'] != null
+      //     ? DateTime.fromMillisecondsSinceEpoch(oder_item['date'])
+      //     : null,
       orderitem_status: oder_item['orderitem_status']
     
     );
@@ -39,9 +37,8 @@ class Orderitem {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'employee_id': employee_id,
-      'order_id': order_id,
-      'orderitem_created': orderitem_created,
+      'create_by': create_by,
+      // 'date': date,
       'orderitem_status': orderitem_status,
     
     };

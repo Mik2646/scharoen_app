@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scharoen_app/models/OderItem.dart';
 import 'package:scharoen_app/screens/Homepage.dart';
 import 'package:scharoen_app/screens/Orderall.dart';
 import 'package:scharoen_app/screens/Profile.dart';
@@ -8,6 +9,7 @@ import 'package:scharoen_app/screens/auth.dart';
 import 'package:scharoen_app/service/database.dart';
 import 'package:scharoen_app/models/Orderall.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 class ordermanufacture extends StatelessWidget {
   const ordermanufacture({Key? key}) : super(key: key);
@@ -15,15 +17,19 @@ class ordermanufacture extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Ordermanufacture db = Ordermanufacture.instance;
-    Stream<List<Orderalls>> stream = db.getordermanufacture();
+    Stream<List<Orderitem>>? stream = db.getordermanufacture();
+
     return Container(
-      child: StreamBuilder<List<Orderalls>>(
+      child: StreamBuilder<List<Orderitem>>(
         stream: stream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
+                  // String dateTime = snapshot.data![index].date!.timeZoneName;
+                  // DateTime date = DateTime.parse(dateTime);
+                  // String formattedDate = DateFormat.yMd().format(date);
                   return Card(
                     color: const Color.fromARGB(255, 255, 255, 255),
                     child: Padding(
@@ -79,12 +85,7 @@ class ordermanufacture extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Row(children: [
-                            Text('- สี' +
-                                snapshot.data![index].color_roof.toString() +
-                                ' ' +
-                                snapshot.data![index].size_roof.toString() +
-                                ' ' +
-                                snapshot.data![index].brand_roof.toString()),
+                            Text('เวลา'),
                           ]),
                         ),
                         Padding(
@@ -137,10 +138,10 @@ class ordermanufacture extends StatelessWidget {
                                     MaterialPageRoute(
                                       builder: (context) => NextPage(
                                         orderId: snapshot.data![index].id,
-                                        lengthCover:
-                                            snapshot.data![index].length_cover,
-                                        colorRoof:
-                                            snapshot.data![index].color_roof,
+                                        // lengthCover:
+                                        //     snapshot.data![index].length_cover,
+                                        // colorRoof:
+                                        //     snapshot.data![index].color_roof,
                                       ),
                                     ),
                                   );

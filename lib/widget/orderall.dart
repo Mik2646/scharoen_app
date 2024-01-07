@@ -202,7 +202,18 @@ class orderall extends StatelessWidget {
                   iconSize: 40,
                   color: Color.fromARGB(255, 112, 112, 112),
                   onPressed: () {
-                    // ปุ่มไปหน้าถัดไป
+                   Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => NextOrderall(
+                                        orderId: snapshot.data![index].id,
+                                        lengthCover:
+                                            snapshot.data![index].length_cover,
+                                        colorRoof:
+                                            snapshot.data![index].color_roof,
+                                      ),
+                                    ),
+                                  );
                   },
                 ),
               ],
@@ -218,6 +229,472 @@ class orderall extends StatelessWidget {
          }
          return Center(child: CircularProgressIndicator());
         },
+      ),
+    );
+  }
+}
+
+class NextOrderall extends StatelessWidget {
+  final String? orderId;
+  final String? lengthCover;
+  final String? colorRoof;
+
+  NextOrderall({Key? key, this.orderId, this.lengthCover, this.colorRoof})
+      : super(key: key);
+  // final _auth = FirebaseAuth.instance;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        elevation:
+            2.5, 
+        shadowColor:
+            const Color.fromARGB(255, 0, 0, 0), 
+        toolbarHeight: 70.0, 
+     title: Text(" ออเดอร์ที่ ${orderId}"),
+      ),
+  
+      body: Center(
+        child: Column(
+          children: [
+            Container(
+              width: 383,
+              height: 696,
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: 250,
+                    top: 70,
+                    child: Container(
+                      width: 90,
+                      height: 90,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("images/roof.png"),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 20,
+                    top: 30,
+                    child: Text(
+                      'หมายเลขออเดอร์ :',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 200,
+                    top: 35,
+                    child: Text(
+                      '${orderId}',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 20,
+                    top: 635,
+                    child: Text(
+                      'จาก นายอัครชัย วารีรัตน์',
+                      style: TextStyle(
+                        color: Color(0xFF808080),
+                        fontSize: 16,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 70,
+                    top: 79,
+                    child: Text(
+                      'สี${colorRoof}',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 50,
+                    top: 90,
+                    child: Transform(
+                      transform: Matrix4.identity()
+                        ..translate(0.0, 0.0)
+                        ..rotateZ(3.14),
+                      child: Container(
+                        width: 19,
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                              width: 1,
+                              strokeAlign: BorderSide.strokeAlignCenter,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 352,
+                    top: 40,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: ShapeDecoration(
+                        color: Color(0xFFFDA726),
+                        shape: OvalBorder(),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 50,
+                    top: 661,
+                    child: Container(
+                      width: 19,
+                      height: 18,
+                      decoration: ShapeDecoration(
+                        color: Color(0xFFD9D9D9),
+                        shape: OvalBorder(),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 77,
+                    top: 661,
+                    child: Container(
+                      width: 19,
+                      height: 18,
+                      decoration: ShapeDecoration(
+                        color: Color(0xFFD9D9D9),
+                        shape: OvalBorder(),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 258,
+                    top: 146.65,
+                    child: Transform(
+                      transform: Matrix4.identity()
+                        ..translate(0.0, 0.0)
+                        ..rotateZ(-1.50),
+                      child: Container(
+                        width: 80.87,
+                        height: 90.31,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              left: 36.03,
+                              top: 2.65,
+                              child: Transform(
+                                transform: Matrix4.identity()
+                                  ..translate(0.0, 0.0)
+                                  ..rotateZ(-2.27),
+                                child: Container(
+                                  width: 51.61,
+                                  height: 69.81,
+                                  decoration:
+                                      BoxDecoration(color: Color(0xFFE1E1E1)),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 31.41,
+                              top: -2.79,
+                              child: Transform(
+                                transform: Matrix4.identity()
+                                  ..translate(0.0, 0.0)
+                                  ..rotateZ(-0.63),
+                                child: Container(
+                                  width: 68.83,
+                                  decoration: ShapeDecoration(
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        width: 1,
+                                        strokeAlign:
+                                            BorderSide.strokeAlignCenter,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 21.81,
+                              top: -13.69,
+                              child: Transform(
+                                transform: Matrix4.identity()
+                                  ..translate(0.0, 0.0)
+                                  ..rotateZ(-0.63),
+                                child: Container(
+                                  width: 69.30,
+                                  decoration: ShapeDecoration(
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        width: 1,
+                                        strokeAlign:
+                                            BorderSide.strokeAlignCenter,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 10.78,
+                              top: -26.89,
+                              child: Transform(
+                                transform: Matrix4.identity()
+                                  ..translate(0.0, 0.0)
+                                  ..rotateZ(-0.67),
+                                child: Container(
+                                  width: 70.14,
+                                  decoration: ShapeDecoration(
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        width: 1,
+                                        strokeAlign:
+                                            BorderSide.strokeAlignCenter,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 40,
+                    top: 186,
+                    child: Text(
+                      'รายการผลิต',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 40,
+                    top: 368,
+                    child: Text(
+                      'รายการผลิตครอบ',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 278,
+                    top: 645,
+                    child: Container(
+                      width: 79,
+                      height: 32,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: Container(
+                              width: 79,
+                              height: 32,
+                              decoration: ShapeDecoration(
+                                color: Color(0xFFD9D9D9),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 23.88,
+                            top: 9.60,
+                            child: SizedBox(
+                              width: 37.66,
+                              height: 12.80,
+                              child: Text(
+                                'Next',
+                                style: TextStyle(
+                                  color: Color(0xFF50A02B),
+                                  fontSize: 14,
+                                  fontFamily: 'Josefin Sans',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 49,
+                    top: 231,
+                    child: Text(
+                      '1.\n\n2.\n\n3.\n\n4.\n\n\n\n',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 49,
+                    top: 407,
+                    child: Text(
+                      '1.\n\n2.\n\n\n\n',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 87,
+                    top: 231,
+                    child: Text(
+                      'เเผ่นตรง 770 ซม.  จำนวน  20 เเผ่น',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 87,
+                    top: 259,
+                    child: Text(
+                      'เเผ่นโค้ง 770 ซม.  จำนวน  10 เเผ่น',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 87,
+                    top: 259,
+                    child: Text(
+                      'เเผ่นโค้ง 770 ซม.  จำนวน  10 เเผ่น',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 336,
+                    top: 229,
+                    child: Checkbox(
+                      value: true,
+                      onChanged: (bool? value) {
+                        // setState(() {
+                        //   isChecked = value ?? false;
+                        // });
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    left: 336,
+                    top: 405,
+                    child: Container(
+                      width: 21,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image:
+                              NetworkImage("https://via.placeholder.com/21x20"),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 336,
+                    top: 255,
+                    child: Container(
+                      width: 21,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image:
+                              NetworkImage("https://via.placeholder.com/21x20"),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 87,
+                    top: 407,
+                    child: Text(
+                      '#21ชนผนัง 450 ซม. จำนวน 2 ท่อน',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+            // Text('Order ID: ${orderId ?? "N/A"}'),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     // Navigate back to the previous page
+            //     Navigator.pop(context);
+            //   },
+            //   child: Text('Go Back'),
+            // ),
+          ],
+        ),
       ),
     );
   }
