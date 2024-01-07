@@ -4,6 +4,7 @@ import 'package:scharoen_app/widget/addOrder.dart';
 
 class addOrder extends StatefulWidget {
   String? orderIds;
+
   addOrder({super.key, required this.orderIds});
   @override
   State<addOrder> createState() => _addOrderState();
@@ -22,10 +23,9 @@ class _addOrderState extends State<addOrder> {
 //   List<AddCover> addcover = List.generate(
 //   amountcover,
 //   (index) => AddCover(
-//     indexcover: index, 
+//     indexcover: index,
 //   ),
 // );
-
 
     return Scaffold(
         appBar: AppBar(
@@ -39,7 +39,6 @@ class _addOrderState extends State<addOrder> {
                 color: Color.fromARGB(255, 135, 135, 135),
               ),
               onPressed: () {
-                print(amount);
                 setState(() {
                   amount++;
                   // counter++;
@@ -60,45 +59,45 @@ class _addOrderState extends State<addOrder> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                 IconButton(
-              icon: Image.network(
-                'https://cdn-icons-png.flaticon.com/128/10608/10608892.png',
-                width: 37,
-                height: 37,
-                color: Color.fromARGB(255, 135, 135, 135),
-              ),
-              onPressed: () {
-                print(amount);
-                setState(() {
-                  amount++;
-                  // counter++;
-                });
-              },
-            ),
-             IconButton(
-              icon: Image.network(
-                'https://cdn-icons-png.flaticon.com/128/7130/7130774.png',
-                width: 37,
-                height: 37,
-                color: Color.fromARGB(255, 135, 135, 135),
-              ),
-              onPressed: () {
-                print(amount);
-                setState(() {
-                  amount++;
-                  // counter++;
-                });
-              },
-            ),
-           
+                  IconButton(
+                    icon: Image.network(
+                      'https://cdn-icons-png.flaticon.com/128/10608/10608892.png',
+                      width: 37,
+                      height: 37,
+                      color: Color.fromARGB(255, 135, 135, 135),
+                    ),
+                    onPressed: () {
+                      print(amount);
+                      setState(() {
+                        amount++;
+                        // counter++;
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: Image.network(
+                      'https://cdn-icons-png.flaticon.com/128/7130/7130774.png',
+                      width: 37,
+                      height: 37,
+                      color: Color.fromARGB(255, 135, 135, 135),
+                    ),
+                    onPressed: () {
+                      print(amount);
+                      setState(() {
+                        amount++;
+                        // counter++;
+                      });
+                    },
+                  ),
                   SizedBox(
                     width: 10,
                   ),
                   InkWell(
                     child: ElevatedButton(
                       onPressed: () async {
-                        await addorderFirebase(addorders[
-                            0]); 
+                        for (var i = 0; i < addorders.length; i++) {
+                          await addorderFirebase(addorders[i]);
+                        }
                       },
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all(
@@ -141,20 +140,19 @@ Future<void> addorderFirebase(Addroof order) async {
     Id = "1";
   }
 
-await FirebaseFirestore.instance.collection('order').doc(Id).set({
-  'count': count,
-  'id': Id,
-  'typeroof': order._typeroofController?.text,
-  'color_roof': order._colorroofController?.text,
-  'brand_roof': order._brand_roofController?.text,
-  'length_roof': order._length_roofController?.text,
-  'size_roof': order._size_roofController?.text,
-  'amount_roof': order._amount_roofController?.text,
-  'note': order._note_roofController?.text, 
-  'orderitem_status':order.status,
-  'datetime': DateTime.now(),
-});
-
+  await FirebaseFirestore.instance.collection('order').doc(Id).set({
+    'count': count,
+    'id': Id,
+    'typeroof': order._typeroofController?.text,
+    'color_roof': order._colorroofController?.text,
+    'brand_roof': order._brand_roofController?.text,
+    'length_roof': order._length_roofController?.text,
+    'size_roof': order._size_roofController?.text,
+    'amount_roof': order._amount_roofController?.text,
+    'note': order._note_roofController?.text,
+    'orderitem_status': order.status,
+    'datetime': DateTime.now(),
+  });
 }
 
 class Addroof extends StatefulWidget {

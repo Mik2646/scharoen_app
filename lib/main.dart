@@ -7,7 +7,8 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // ตรวจสอบที่นี่
+  await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform); // ตรวจสอบที่นี่
   runApp(MyApp());
 }
 
