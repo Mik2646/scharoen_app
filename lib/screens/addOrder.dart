@@ -2,44 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:scharoen_app/widget/addOrder.dart';
 
 class addOrder extends StatefulWidget {
-  const addOrder({super.key});
-
+  String? orderIds;
+  addOrder({super.key, required this.orderIds});
   @override
   State<addOrder> createState() => _addOrderState();
 }
 
 class _addOrderState extends State<addOrder> {
+  int amount = 1;
   @override
   Widget build(BuildContext context) {
+    List<Addorder> addorders = List.generate(
+        amount,
+        (index) => Addorder(
+              index: index,
+            ));
     return Scaffold(
-        appBar: AppBar(title: Text("เพิ่มรายการผลิต")),
-        body: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Addorder(),
-            ),
-            Container(
-              width: 60.0, // กำหนดความกว้างของปุ่ม
-
-              child: ElevatedButton(
-                onPressed: () {
-                  print("ควย");
-                  setState(() {
-                    Addorder();
-                    // counter++;
-                  });
-                },
-                child: Icon(Icons.add),
-              ),
-            ),
-          ],
+        appBar: AppBar(
+          title: Text("เพิ่มรายการผลิต "),
+        ),
+        body: ListView.builder(
+            itemCount: addorders.length,
+            itemBuilder: (context, index) {
+              return addorders[index];
+            }),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Container(
+          width: 320,
+          child: ElevatedButton(
+            onPressed: () {
+              print(amount);
+              setState(() {
+                amount++;
+                // counter++;
+              });
+            },
+            child: Icon(Icons.add),
+          ),
         ),
         bottomNavigationBar: Container(
           height: 100,
-          child: Column
-          
-          (
+          child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -57,15 +60,20 @@ class _addOrderState extends State<addOrder> {
                       child: Text('เพิ่มรายการครอบ'),
                     ),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   ElevatedButton(
-                      onPressed: null, // ตัว ElevatedButton ไม่มีการให้การทำงาน
-                      style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(
-                            0), // ตั้งค่า elevation เป็น 0 (ไม่มีเงา)
-                      ),
-                      child: Text('ยืนยัน',style: TextStyle(color: Colors.green),),
+                    onPressed: null, // ตัว ElevatedButton ไม่มีการให้การทำงาน
+                    style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(
+                          0), // ตั้งค่า elevation เป็น 0 (ไม่มีเงา)
                     ),
+                    child: Text(
+                      'ยืนยัน',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
                 ],
               ),
               Row(
