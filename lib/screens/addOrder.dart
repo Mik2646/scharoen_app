@@ -151,6 +151,7 @@ await FirebaseFirestore.instance.collection('order').doc(Id).set({
   'size_roof': order._size_roofController?.text,
   'amount_roof': order._amount_roofController?.text,
   'note': order._note_roofController?.text, 
+  'orderitem_status':order.status,
   'datetime': DateTime.now(),
 });
 
@@ -166,6 +167,7 @@ class Addroof extends StatefulWidget {
   TextEditingController? _size_roofController = TextEditingController();
   TextEditingController? _amount_roofController = TextEditingController();
   TextEditingController? _note_roofController = TextEditingController();
+  String status = 'pending';
 
   List<String> typeroof = ['นอก', 'จิงโจ้', 'บลูสโคป'];
   List<String> colorroof = ['สีซิงค์', 'สีน้ำเงิน', 'สีเเดงมั่งมี'];
