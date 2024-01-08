@@ -122,7 +122,7 @@ class ordermanufacture extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "จาก นายอัครชัย วารีรัตน์",
+                                "จาก ${snapshot.data![index].create_by}",
                                 style: TextStyle(
                                     color: const Color.fromARGB(
                                         255, 151, 151, 151)),

@@ -5,15 +5,42 @@ import 'package:scharoen_app/screens/auth.dart';
 import 'package:scharoen_app/widget/addOrder.dart';
 
 class addOrder extends StatefulWidget {
-  addOrder({super.key, this.orderIds});
-  String? orderIds;
+  addOrder({super.key, this.fullname});
+  String? fullname;
   @override
   State<addOrder> createState() => _addOrderState();
 }
 
 class _addOrderState extends State<addOrder> {
   int amount = 1;
+  String? orderId;
+  String? counts = "000";
   int amountcover = 1;
+
+  Future addOrderId() async {
+    await FirebaseFirestore.instance
+        .collection("oder_item")
+        .get()
+        .then((value) {
+      if (value != null) {
+        int size = value.size;
+        size ??= 0;
+        setState(() {
+          orderId = "$counts$size";
+        });
+      }
+    });
+    var now = DateTime.now();
+    var dfm = DateFormat('dd-MM-yyyy');
+    String dateFormat = dfm.format(now);
+    await FirebaseFirestore.instance.collection("oder_item").add({
+      "id": "$orderId",
+      "date": dateFormat,
+      "orderitem_status": "pending",
+      "create_by": widget.fullname
+    });
+  }
+
   Future<void> addorderFirebase(Addroof order, String? orderId) async {
     final snapshot = await FirebaseFirestore.instance
         .collection('order')
@@ -63,7 +90,7 @@ class _addOrderState extends State<addOrder> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("เพิ่มรายการผลิต ${widget.orderIds}"),
+          title: Text("เพิ่มรายการผลิต $orderId"),
           actions: [
             IconButton(
               icon: Image.network(
@@ -148,7 +175,7 @@ class _addOrderState extends State<addOrder> {
                                   onPressed: () async {
                                     for (var i = 0; i < addorders.length; i++) {
                                       await addorderFirebase(
-                                          addorders[i], widget.orderIds);
+                                          addorders[i], orderId);
                                     }
                                     Navigator.of(context)
                                         .pop(); // Close the dialog
@@ -161,9 +188,10 @@ class _addOrderState extends State<addOrder> {
                                     );
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              Authenticationsceen()),
+                                      MaterialPageRoute(builder: (context) {
+                                        addOrderId();
+                                        return Authenticationsceen();
+                                      }),
                                     );
                                   },
                                   child: Text('ยืนยัน'),
