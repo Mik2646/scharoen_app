@@ -28,8 +28,7 @@ class _HomepageState extends State<Homepage> {
   // final AuthenticationService auth;
   int employeeCount = 10;
   bool isSwitchOn = false;
-  String? orderId;
-  String? counts = "000";
+
   CollectionReference? user = FirebaseFirestore.instance.collection("employee");
   Employee? employees = Employee();
   String? fullname;
@@ -68,25 +67,29 @@ class _HomepageState extends State<Homepage> {
     }
   }
 
-  Future addOrderId() async {
-    await FirebaseFirestore.instance
-        .collection("oder_item")
-        .get()
-        .then((value) {
-      setState(() {
-        orderId = "$counts${value.size}";
-      });
-    });
-    var now = DateTime.now();
-    var dfm = DateFormat('dd-MM-yyyy');
-    String dateFormat = dfm.format(now);
-    await FirebaseFirestore.instance.collection("oder_item").add({
-      "id": "$orderId",
-      "date": dateFormat,
-      "orderitem_status": "pending",
-      "create_by": fullname
-    });
-  }
+  // Future addOrderId() async {
+  //   await FirebaseFirestore.instance
+  //       .collection("oder_item")
+  //       .get()
+  //       .then((value) {
+  //     if (value != null) {
+  //       int size = value.size;
+  //       size ??= 0;
+  //       setState(() {
+  //         orderId = "$counts$size";
+  //       });
+  //     }
+  //   });
+  //   var now = DateTime.now();
+  //   var dfm = DateFormat('dd-MM-yyyy');
+  //   String dateFormat = dfm.format(now);
+  //   await FirebaseFirestore.instance.collection("oder_item").add({
+  //     "id": "$orderId",
+  //     "date": dateFormat,
+  //     "orderitem_status": "pending",
+  //     "create_by": fullname
+  //   });
+  // }
 
   void initState() {
     super.initState();
@@ -252,9 +255,9 @@ class _HomepageState extends State<Homepage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    addOrderId();
+                    // addOrderId();
                     return addOrder(
-                      orderIds: orderId,
+                      fullname: fullname,
                     );
                   }),
                 );
@@ -288,9 +291,9 @@ class _HomepageState extends State<Homepage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) {
-              addOrderId();
+              // addOrderId();
               return addOrder(
-                orderIds: orderId,
+                fullname: fullname,
               );
             }),
           );
