@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:scharoen_app/models/OderItem.dart';
 import 'package:scharoen_app/screens/Homepage.dart';
 import 'package:scharoen_app/screens/Orderall.dart';
@@ -168,12 +170,10 @@ class NextPage extends StatelessWidget {
   final String? orderId;
   final String? lengthCover;
   final String? colorRoof;
-  
-  
 
   NextPage({Key? key, this.orderId, this.lengthCover, this.colorRoof})
       : super(key: key);
-      
+
   final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
@@ -448,7 +448,6 @@ class NextPage extends StatelessWidget {
                       ),
                     ),
                   ),
-      
                   Positioned(
                     left: 45,
                     top: 211,
@@ -482,8 +481,6 @@ class NextPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                 
                 ],
               ),
             )
@@ -512,13 +509,10 @@ class NextPage extends StatelessWidget {
                 InkWell(
                   child: ElevatedButton(
                     onPressed: () async {
-                        Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            NextPage2()),
-                                  );
-                    
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => NextPage2()),
+                      );
                     },
                     style: ButtonStyle(
                       elevation: MaterialStateProperty.all(
@@ -532,7 +526,6 @@ class NextPage extends StatelessWidget {
                 ),
               ],
             ),
-          
           ],
         ),
       ),
@@ -540,30 +533,39 @@ class NextPage extends StatelessWidget {
   }
 }
 
-
 class NextPage2 extends StatelessWidget {
   final String? orderId;
 
+  Future<void> _pickImage() async {
+    final imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
 
-  NextPage2({Key? key, this.orderId,})
-      : super(key: key);
+    if (pickedFile != null) {
+      // Handle the picked image, e.g., display it or upload it
+      print("Selected image path: ${pickedFile.path}");
+    }
+  }
+ bool isChecked = true;
+  NextPage2({
+    Key? key,
+    this.orderId,
+  }) : super(key: key);
   final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        elevation:
-            2.5, 
+        elevation: 2.5,
         shadowColor:
             const Color.fromARGB(255, 0, 0, 0), // สีของเงาที่คุณต้องการ
-        toolbarHeight: 70.0, 
+        toolbarHeight: 70.0,
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
               icon: Icon(Icons.menu),
               onPressed: () {
-                Scaffold.of(context).openDrawer(); 
+                Scaffold.of(context).openDrawer();
               },
             );
           },
@@ -807,48 +809,85 @@ class NextPage2 extends StatelessWidget {
                       ),
                     ),
                   ),
-                
-      
-           
-
-                 
                 ],
               ),
             ),
             Container(
-width: 292,
-height: 179,
-decoration: ShapeDecoration(
-color: Colors.white,
-shape: RoundedRectangleBorder(
-side: BorderSide(width: 1, color: Color(0xFFABABAB)),
-borderRadius: BorderRadius.circular(10),
-
-),
-),
-child: Padding(
-  padding: const EdgeInsets.all(8.0),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      IconButton(
-                    icon: Image.network(
-                      'https://cdn-icons-png.flaticon.com/128/7245/7245585.png',
-                      width: 37,
-                      height: 37,
-                      color: Color.fromARGB(255, 135, 135, 135),
+              width: 292,
+              height: 179,
+              decoration: ShapeDecoration(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(width: 1, color: Color(0xFFABABAB)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      icon: Image.network(
+                        'https://cdn-icons-png.flaticon.com/128/7245/7245585.png',
+                        width: 37,
+                        height: 37,
+                        color: Color.fromARGB(255, 135, 135, 135),
+                      ),
+                      onPressed: () {
+                        _pickImage();
+                      },
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Orderall()),
-                      );
-                    },
-                  ),
-    ],
-  ),
-),
-)
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40),
+              child: Row(
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType
+                                .leftToRight, // Set the transition type
+                            duration: Duration(
+                                milliseconds:
+                                    300), // Set the duration of the transition
+                            child: NextPage(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "รายการผลิตทั้งหมด",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 106, 106, 106),
+                          decoration: TextDecoration.underline,
+                        ),
+                      )),
+                ],
+              ),
+            ),
+            SizedBox(height: 20,),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+              
+              
+            SizedBox(height: 150),
+            Checkbox(
+              value: isChecked,
+              onChanged: (newValue) {
+               isChecked = true;
+
+              },
+              visualDensity: VisualDensity(vertical: 2.5, horizontal: 2.5), // Adjust the values as needed
+            ),
+            Text("ยืนยันการตรวจสอบ")
+            ],)
           ],
         ),
       ]),
@@ -879,8 +918,7 @@ child: Padding(
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text('ยืนยันการตรวจสอบ'),
-                            content:
-                                Text('คุณต้องการยืนยันการตรวจสอบหรือไม่?'),
+                            content: Text('คุณต้องการยืนยันการตรวจสอบหรือไม่?'),
                             actions: [
                               TextButton(
                                 onPressed: () {
@@ -920,9 +958,6 @@ child: Padding(
                           );
                         },
                       );
-                      // for (var i = 0; i < addorders.length; i++) {
-                      //   await addorderFirebase(addorders[i]);
-                      // }
                     },
                     style: ButtonStyle(
                       elevation: MaterialStateProperty.all(
@@ -936,14 +971,7 @@ child: Padding(
                 ),
               ],
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     Text(
-            //       "By s.charoen",
-            //       style: TextStyle(color: Colors.grey),
-            //     )
-            //   ],
+    
             // ),
           ],
         ),
