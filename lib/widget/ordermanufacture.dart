@@ -168,9 +168,12 @@ class NextPage extends StatelessWidget {
   final String? orderId;
   final String? lengthCover;
   final String? colorRoof;
+  
+  
 
   NextPage({Key? key, this.orderId, this.lengthCover, this.colorRoof})
       : super(key: key);
+      
   final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
@@ -355,8 +358,8 @@ class NextPage extends StatelessWidget {
           ],
         ),
       ),
-      body: Center(
-        child: Column(
+      body: ListView(children: [
+        Column(
           children: [
             Container(
               width: 383,
@@ -392,7 +395,7 @@ class NextPage extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    left: 210,
+                    left: 180,
                     top: 35,
                     child: Text(
                       '${orderId}',
@@ -406,50 +409,16 @@ class NextPage extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    left: 20,
-                    top: 635,
-                    child: Text(
-                      'จาก นายอัครชัย วารีรัตน์',
-                      style: TextStyle(
-                        color: Color(0xFF808080),
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 80,
+                    left: 30,
                     top: 79,
                     child: Text(
-                      'สี${colorRoof}',
+                      '⎯ สี${colorRoof}',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
                         fontFamily: 'Josefin Sans',
                         fontWeight: FontWeight.w400,
                         height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 70,
-                    top: 87,
-                    child: Transform(
-                      transform: Matrix4.identity()
-                        ..translate(0.0, 0.0)
-                        ..rotateZ(3.14),
-                      child: Container(
-                        width: 19,
-                        decoration: ShapeDecoration(
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              width: 1,
-                              strokeAlign: BorderSide.strokeAlignCenter,
-                            ),
-                          ),
-                        ),
                       ),
                     ),
                   ),
@@ -466,127 +435,8 @@ class NextPage extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    left: 50,
-                    top: 661,
-                    child: Container(
-                      width: 19,
-                      height: 18,
-                      decoration: ShapeDecoration(
-                        color: Color(0xFFD9D9D9),
-                        shape: OvalBorder(),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 77,
-                    top: 661,
-                    child: Container(
-                      width: 19,
-                      height: 18,
-                      decoration: ShapeDecoration(
-                        color: Color(0xFFD9D9D9),
-                        shape: OvalBorder(),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 258,
-                    top: 146.65,
-                    child: Transform(
-                      transform: Matrix4.identity()
-                        ..translate(0.0, 0.0)
-                        ..rotateZ(-1.50),
-                      child: Container(
-                        width: 80.87,
-                        height: 90.31,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              left: 36.03,
-                              top: 2.65,
-                              child: Transform(
-                                transform: Matrix4.identity()
-                                  ..translate(0.0, 0.0)
-                                  ..rotateZ(-2.27),
-                                child: Container(
-                                  width: 51.61,
-                                  height: 69.81,
-                                  decoration:
-                                      BoxDecoration(color: Color(0xFFE1E1E1)),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 31.41,
-                              top: -2.79,
-                              child: Transform(
-                                transform: Matrix4.identity()
-                                  ..translate(0.0, 0.0)
-                                  ..rotateZ(-0.63),
-                                child: Container(
-                                  width: 68.83,
-                                  decoration: ShapeDecoration(
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                        width: 1,
-                                        strokeAlign:
-                                            BorderSide.strokeAlignCenter,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 21.81,
-                              top: -13.69,
-                              child: Transform(
-                                transform: Matrix4.identity()
-                                  ..translate(0.0, 0.0)
-                                  ..rotateZ(-0.63),
-                                child: Container(
-                                  width: 69.30,
-                                  decoration: ShapeDecoration(
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                        width: 1,
-                                        strokeAlign:
-                                            BorderSide.strokeAlignCenter,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 10.78,
-                              top: -26.89,
-                              child: Transform(
-                                transform: Matrix4.identity()
-                                  ..translate(0.0, 0.0)
-                                  ..rotateZ(-0.67),
-                                child: Container(
-                                  width: 70.14,
-                                  decoration: ShapeDecoration(
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                        width: 1,
-                                        strokeAlign:
-                                            BorderSide.strokeAlignCenter,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 40,
-                    top: 186,
+                    left: 25,
+                    top: 166,
                     child: Text(
                       'รายการผลิต',
                       style: TextStyle(
@@ -598,200 +448,502 @@ class NextPage extends StatelessWidget {
                       ),
                     ),
                   ),
+      
                   Positioned(
-                    left: 40,
-                    top: 368,
-                    child: Text(
-                      'รายการผลิตครอบ',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 278,
-                    top: 645,
-                    child: Container(
-                      width: 79,
-                      height: 32,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: 0,
-                            top: 0,
-                            child: Container(
-                              width: 79,
-                              height: 32,
-                              decoration: ShapeDecoration(
-                                color: Color(0xFFD9D9D9),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 23.88,
-                            top: 9.60,
-                            child: SizedBox(
-                              width: 37.66,
-                              height: 12.80,
-                              child: Text(
-                                'Next',
+                    left: 45,
+                    top: 211,
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 310,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '1.',
                                 style: TextStyle(
-                                  color: Color(0xFF50A02B),
-                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontSize: 16,
                                   fontFamily: 'Josefin Sans',
                                   fontWeight: FontWeight.w400,
                                   height: 0,
                                 ),
                               ),
-                            ),
+                              Checkbox(
+                                value: true,
+                                onChanged: (bool? value) {
+                                  value = true;
+                                },
+                                activeColor: Colors.green,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 49,
-                    top: 231,
-                    child: Text(
-                      '1.\n\n2.\n\n3.\n\n4.\n\n\n\n',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 49,
-                    top: 407,
-                    child: Text(
-                      '1.\n\n2.\n\n\n\n',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 87,
-                    top: 231,
-                    child: Text(
-                      'เเผ่นตรง 770 ซม.  จำนวน  20 เเผ่น',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 87,
-                    top: 259,
-                    child: Text(
-                      'เเผ่นโค้ง 770 ซม.  จำนวน  10 เเผ่น',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 87,
-                    top: 259,
-                    child: Text(
-                      'เเผ่นโค้ง 770 ซม.  จำนวน  10 เเผ่น',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 336,
-                    top: 229,
-                    child: Checkbox(
-                      value: true,
-                      onChanged: (bool? value) {
-                        // setState(() {
-                        //   isChecked = value ?? false;
-                        // });
-                      },
-                    ),
-                  ),
-                  Positioned(
-                    left: 336,
-                    top: 405,
-                    child: Container(
-                      width: 21,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image:
-                              NetworkImage("https://via.placeholder.com/21x20"),
-                          fit: BoxFit.fill,
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                  Positioned(
-                    left: 336,
-                    top: 255,
-                    child: Container(
-                      width: 21,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image:
-                              NetworkImage("https://via.placeholder.com/21x20"),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 87,
-                    top: 407,
-                    child: Text(
-                      '#21ชนผนัง 450 ซม. จำนวน 2 ท่อน',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
+
+                 
                 ],
               ),
             )
-            // Text('Order ID: ${orderId ?? "N/A"}'),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     // Navigate back to the previous page
-            //     Navigator.pop(context);
+          ],
+        ),
+      ]),
+      bottomNavigationBar: Container(
+        height: 80,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  'จาก นายอัครชัย วารีรัตน์',
+                  style: TextStyle(
+                    color: Color(0xFF808080),
+                    fontSize: 14,
+                    fontFamily: 'Josefin Sans',
+                    height: 0,
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                InkWell(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                        Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            NextPage2()),
+                                  );
+                    
+                    },
+                    style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(
+                          1), // ตั้งค่า elevation เป็น 0 (ไม่มีเงา)
+                    ),
+                    child: Text(
+                      'Next',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class NextPage2 extends StatelessWidget {
+  final String? orderId;
+
+
+  NextPage2({Key? key, this.orderId,})
+      : super(key: key);
+  final _auth = FirebaseAuth.instance;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        elevation:
+            2.5, 
+        shadowColor:
+            const Color.fromARGB(255, 0, 0, 0), // สีของเงาที่คุณต้องการ
+        toolbarHeight: 70.0, 
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer(); 
+              },
+            );
+          },
+        ),
+        title: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+              child: ClipOval(
+                child: Image.network(
+                  'https://cdn-icons-png.flaticon.com/128/848/848043.png', // URL ของรูปภาพ
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            SizedBox(width: 8.0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _auth.currentUser!.email.toString(),
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ), // ชื่อ
+              ],
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(bottom: 5),
+            //   child: Text(
+            //   isSwitchOn ? '•' : '•',
+            //   style: TextStyle(
+            //     color: isSwitchOn ? Colors.green : const Color.fromARGB(255, 103, 103, 103),
+            //     fontSize: 38.0,
+            //   ),
+            //               ),
+            // ),
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: IconButton(
+              icon: Image.network(
+                'https://cdn-icons-png.flaticon.com/128/4947/4947506.png',
+                width: 37,
+                height: 37,
+                color: Color.fromARGB(255, 135, 135, 135),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Orderall()),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      drawer: Drawer(
+        // ส่วนของเมนูทางซ้ายสุด (Drawer)
+        child: Column(
+          children: [
+            DrawerHeader(
+              // decoration: BoxDecoration(
+              //       color: Colors.grey,
+              //     ),
+              curve: Curves.fastEaseInToSlowEaseOut,
+
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                          width: 100,
+                          child: Image.asset("images/logoscaroen.png")),
+                      CircleAvatar(
+                        backgroundColor: Color.fromARGB(31, 255, 255, 255),
+                        child: Image.network(
+                            "https://cdn-icons-png.flaticon.com/128/848/848043.png"),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _auth.currentUser!.email.toString(),
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      //        Text(
+                      // isSwitchOn ? '•' : '•',
+                      // style: TextStyle(
+                      //   color: isSwitchOn ? Color(0xFF23E41F) : const Color.fromARGB(255, 103, 103, 103),
+                      //   fontSize: 24.0,
+                      // ),
+                      //             ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              // leading: Icon(Icons.account_circle_outlined),
+              title: Text('หน้าเเรก'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Authenticationsceen()),
+                );
+              },
+            ),
+            ListTile(
+              // leading: Icon(Icons.account_circle_outlined),
+              title: Text('โปรไฟล์'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Profile()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('พนักงาน'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyWidget()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('ออเดอร์ทั้งหมด'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Orderall()),
+                );
+              },
+            ),
+            // ListTile(
+            //   title: Text('เพิ่มรายการผลิต'),
+            //   onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) {
+            //         return addOrder(
+            //           orderIds: orderId,
+            //         );
+            //       }),
+            //     );
             //   },
-            //   child: Text('Go Back'),
+            // ),
+            SizedBox(
+              height: 300,
+            ),
+            Text(
+              "By s.charoen",
+              style: TextStyle(color: const Color.fromARGB(255, 172, 172, 172)),
+            )
+          ],
+        ),
+      ),
+      body: ListView(children: [
+        Column(
+          children: [
+            Container(
+              width: 383,
+              height: 196,
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: 250,
+                    top: 70,
+                    child: Container(
+                      width: 90,
+                      height: 90,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("images/roof.png"),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 20,
+                    top: 30,
+                    child: Text(
+                      'หมายเลขออเดอร์ :',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 180,
+                    top: 35,
+                    child: Text(
+                      '${orderId}',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 30,
+                    top: 79,
+                    child: Text(
+                      '⎯ สี',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Josefin Sans',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 352,
+                    top: 40,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: ShapeDecoration(
+                        color: Color(0xFFFDA726),
+                        shape: OvalBorder(),
+                      ),
+                    ),
+                  ),
+                
+      
+           
+
+                 
+                ],
+              ),
+            ),
+            Container(
+width: 292,
+height: 179,
+decoration: ShapeDecoration(
+color: Colors.white,
+shape: RoundedRectangleBorder(
+side: BorderSide(width: 1, color: Color(0xFFABABAB)),
+borderRadius: BorderRadius.circular(10),
+
+),
+),
+child: Padding(
+  padding: const EdgeInsets.all(8.0),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      IconButton(
+                    icon: Image.network(
+                      'https://cdn-icons-png.flaticon.com/128/7245/7245585.png',
+                      width: 37,
+                      height: 37,
+                      color: Color.fromARGB(255, 135, 135, 135),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Orderall()),
+                      );
+                    },
+                  ),
+    ],
+  ),
+),
+)
+          ],
+        ),
+      ]),
+      bottomNavigationBar: Container(
+        height: 80,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  'จาก นายอัครชัย วารีรัตน์',
+                  style: TextStyle(
+                    color: Color(0xFF808080),
+                    fontSize: 14,
+                    fontFamily: 'Josefin Sans',
+                    height: 0,
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                InkWell(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('ยืนยันการตรวจสอบ'),
+                            content:
+                                Text('คุณต้องการยืนยันการตรวจสอบหรือไม่?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                },
+                                child: Text('ยกเลิก'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  // for (var i = 0; i < addorders.length; i++) {
+                                  //   await addorderFirebase(
+                                  //       addorders[i], widget.orderIds);
+                                  // }
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('เพิ่มออเดอร์สำเร็จ'),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 104, 255, 53),
+                                    ),
+                                  );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            Authenticationsceen()),
+                                  );
+                                },
+                                child: Text(
+                                  'ยืนยัน',
+                                  style: TextStyle(color: Colors.green),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      // for (var i = 0; i < addorders.length; i++) {
+                      //   await addorderFirebase(addorders[i]);
+                      // }
+                    },
+                    style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(
+                          1), // ตั้งค่า elevation เป็น 0 (ไม่มีเงา)
+                    ),
+                    child: Text(
+                      'Finish',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Text(
+            //       "By s.charoen",
+            //       style: TextStyle(color: Colors.grey),
+            //     )
+            //   ],
             // ),
           ],
         ),

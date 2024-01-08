@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:scharoen_app/screens/auth.dart';
-import 'package:scharoen_app/widget/addOrder.dart';
+
 
 class addOrder extends StatefulWidget {
   addOrder({super.key, this.fullname});
@@ -406,7 +406,7 @@ class _AddorderState extends State<Addroof> {
                   height: 20,
                   child: TextFormField(
                     controller: widget._length_roofController,
-                    keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: InputDecoration(
