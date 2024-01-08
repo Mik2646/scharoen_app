@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:scharoen_app/screens/auth.dart';
 import 'package:scharoen_app/widget/addOrder.dart';
 
 class addOrder extends StatefulWidget {
+  addOrder({super.key, this.orderIds});
   String? orderIds;
-
-  addOrder({super.key, required this.orderIds});
   @override
   State<addOrder> createState() => _addOrderState();
 }
@@ -14,6 +14,38 @@ class addOrder extends StatefulWidget {
 class _addOrderState extends State<addOrder> {
   int amount = 1;
   int amountcover = 1;
+  Future<void> addorderFirebase(Addroof order, String? orderId) async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('order')
+        .orderBy('datetime', descending: true)
+        .get();
+    var Id, count;
+    if (snapshot.docs.isNotEmpty) {
+      count = snapshot.docs.first['count'] + 1;
+      Id = '$count';
+    } else {
+      count = 1;
+      Id = "1";
+    }
+    var now = DateTime.now();
+    var dfm = DateFormat('dd-MM-yyyy');
+    String dateFormat = dfm.format(now);
+
+    await FirebaseFirestore.instance.collection('order').doc(Id).set({
+      'count': count,
+      'id': Id,
+      'typeroof': order._typeroofController?.text,
+      'color_roof': order._colorroofController?.text,
+      'brand_roof': order._brand_roofController?.text,
+      'length_roof': order._length_roofController?.text,
+      'size_roof': order._size_roofController?.text,
+      'amount_roof': order._amount_roofController?.text,
+      'note': order._note_roofController?.text,
+      'orderitem_status': order.status,
+      "order_itemId": "$orderId",
+      'datetime': dateFormat,
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +63,7 @@ class _addOrderState extends State<addOrder> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("เพิ่มรายการผลิต "),
+          title: Text("เพิ่มรายการผลิต ${widget.orderIds}"),
           actions: [
             IconButton(
               icon: Image.network(
@@ -114,11 +146,11 @@ class _addOrderState extends State<addOrder> {
                                 ),
                                 TextButton(
                                   onPressed: () async {
-                                   
                                     for (var i = 0; i < addorders.length; i++) {
-                                      await addorderFirebase(addorders[i]);
+                                      await addorderFirebase(
+                                          addorders[i], widget.orderIds);
                                     }
-                                     Navigator.of(context)
+                                    Navigator.of(context)
                                         .pop(); // Close the dialog
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
@@ -169,35 +201,6 @@ class _addOrderState extends State<addOrder> {
           ),
         ));
   }
-}
-
-Future<void> addorderFirebase(Addroof order) async {
-  final snapshot = await FirebaseFirestore.instance
-      .collection('order')
-      .orderBy('datetime', descending: true)
-      .get();
-  var Id, count;
-  if (snapshot.docs.isNotEmpty) {
-    count = snapshot.docs.first['count'] + 1;
-    Id = '$count';
-  } else {
-    count = 1;
-    Id = "1";
-  }
-
-  await FirebaseFirestore.instance.collection('order').doc(Id).set({
-    'count': count,
-    'id': Id,
-    'typeroof': order._typeroofController?.text,
-    'color_roof': order._colorroofController?.text,
-    'brand_roof': order._brand_roofController?.text,
-    'length_roof': order._length_roofController?.text,
-    'size_roof': order._size_roofController?.text,
-    'amount_roof': order._amount_roofController?.text,
-    'note': order._note_roofController?.text,
-    'orderitem_status': order.status,
-    'datetime': DateTime.now(),
-  });
 }
 
 class Addroof extends StatefulWidget {
