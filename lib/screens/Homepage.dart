@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:scharoen_app/models/Employee.dart';
 import 'package:scharoen_app/screens/Orderall.dart';
 import 'package:scharoen_app/screens/Profile.dart';
@@ -29,21 +30,21 @@ class _HomepageState extends State<Homepage> {
   bool isSwitchOn = false;
   String? orderId;
   String? counts = "000";
-  CollectionReference user = FirebaseFirestore.instance.collection("employee");
-  Employee employees = Employee();
+  CollectionReference? user = FirebaseFirestore.instance.collection("employee");
+  Employee? employees = Employee();
   String? fullname;
   void updateStatus(bool? status) async {
     User? currentUser = _auth.currentUser;
     if (currentUser != null) {
       await user
-          .where("email", isEqualTo: currentUser.email)
+          ?.where("email", isEqualTo: currentUser.email)
           .get()
           .then((value) {
         for (var element in value.docs) {
           setState(() {
             fullname = "${element['name']} ${element['lastname']}";
           });
-          user.doc(element.id).update({"status": status});
+          user?.doc(element.id).update({"status": status});
         }
       });
     }
@@ -52,17 +53,18 @@ class _HomepageState extends State<Homepage> {
   void getUser() async {
     User? currentUser = _auth.currentUser;
     if (currentUser != null) {
-      await user
-          .where("email", isEqualTo: currentUser.email)
-          .get()
-          .then((value) {
-        for (var element in value.docs) {
-          print(element['name']);
-          setState(() {
-            fullname = "${element['name']} ${element['lastname']}";
-          });
-        }
-      });
+      if (currentUser.email != null) {
+        var email = currentUser.email;
+        await user?.where("email", isEqualTo: email).get().then((value) {
+          for (var element in value.docs) {
+            setState(() {
+              fullname = "${element['name']} ${element['lastname']}";
+            });
+          }
+        });
+      }
+    } else {
+      return;
     }
   }
 
@@ -75,9 +77,12 @@ class _HomepageState extends State<Homepage> {
         orderId = "$counts${value.size}";
       });
     });
+    var now = DateTime.now();
+    var dfm = DateFormat('dd-MM-yyyy');
+    String dateFormat = dfm.format(now);
     await FirebaseFirestore.instance.collection("oder_item").add({
       "id": "$orderId",
-      "date": FieldValue.serverTimestamp(),
+      "date": dateFormat,
       "orderitem_status": "pending",
       "create_by": fullname
     });
@@ -126,7 +131,7 @@ class _HomepageState extends State<Homepage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                fullname!,
+                  fullname!,
                   style: TextStyle(
                     fontSize: 14,
                   ),
@@ -196,7 +201,7 @@ class _HomepageState extends State<Homepage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                       fullname!,
+                        fullname!,
                         style: TextStyle(fontSize: 15),
                       ),
                       Text(
@@ -265,7 +270,7 @@ class _HomepageState extends State<Homepage> {
           ],
         ),
       ),
-      body:Padding(
+      body: Padding(
         padding: const EdgeInsets.all(18.0),
         child: ordermanufacture(),
       ),
