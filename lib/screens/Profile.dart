@@ -4,7 +4,7 @@ import 'package:scharoen_app/models/Employee.dart';
 import 'package:scharoen_app/screens/auth.dart';
 import 'package:scharoen_app/service/Authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:scharoen_app/service/database.dart';
+
 
 class Profile extends StatefulWidget {
   @override
@@ -99,14 +99,14 @@ class _ProfileState extends State<Profile> {
               "${empoly?.firstname} ${empoly?.lastname}",
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w400
               ),
             ),
             Text(
               "${empoly?.role}",
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.grey,
+                color: const Color.fromARGB(255, 130, 130, 130),
               ),
             ),
             SizedBox(height: 24),
@@ -116,7 +116,7 @@ class _ProfileState extends State<Profile> {
             _buildInfoCard('นามสกุล', "${empoly?.lastname}"),
             SizedBox(height: 24),
             SizedBox(
-              height: 180,
+              height: 100,
             ),
             Text(
               "By s.charoen",
@@ -134,7 +134,7 @@ class _ProfileState extends State<Profile> {
       child: ListTile(
         title: Text(
           title,
-          style: TextStyle(color: const Color.fromARGB(255, 94, 94, 94)),
+          style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
         ),
         subtitle: Text(value),
       ),

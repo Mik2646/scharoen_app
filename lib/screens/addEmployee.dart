@@ -196,6 +196,12 @@ class _AddUserScreenState extends State<AddUserScreen> {
               keyboardType: TextInputType.emailAddress,
                textInputAction: TextInputAction.next
             ),
+               TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(labelText: 'รหัสผ่าน'),
+              keyboardType: TextInputType.visiblePassword,
+               textInputAction: TextInputAction.next
+            ),
             TextField(
               controller: _phoneController,
               decoration: InputDecoration(labelText: 'เบอร์โทร'),
@@ -290,6 +296,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
         _emailController?.text.isNotEmpty == true &&
         _phoneController?.text.isNotEmpty == true &&
         _addressController?.text.isNotEmpty == true &&
+        _passwordController?.text.isNotEmpty == true &&
         _roleController?.text.isNotEmpty == true;
   }
 
@@ -314,6 +321,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
       'lastname': _lastnameController?.text,
       'address': _addressController?.text,
       'email': _emailController?.text,
+      'password':_passwordController?.text,
       'phone': _phoneController?.text,
       'role': _roleController?.text,
       'status': _status,

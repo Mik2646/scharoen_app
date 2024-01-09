@@ -82,8 +82,23 @@ class ordermanufacture extends StatelessWidget {
                                 ),
                               ),
                             ),
+              
                           ],
                         ),
+                  //                      Positioned(
+                  //   left: 250,
+                  //   top: 70,
+                  //   child: Container(
+                  //     width: 90,
+                  //     height: 90,
+                  //     decoration: BoxDecoration(
+                  //       image: DecorationImage(
+                  //         image: AssetImage("images/roof.png"),
+                  //         fit: BoxFit.fill,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Row(children: [
