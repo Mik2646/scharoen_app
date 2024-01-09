@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:scharoen_app/models/OderItem.dart';
 import 'package:scharoen_app/screens/Homepage.dart';
 import 'package:scharoen_app/screens/Orderall.dart';
@@ -83,6 +85,20 @@ class ordermanufacture extends StatelessWidget {
                             ),
                           ],
                         ),
+                        //                      Positioned(
+                        //   left: 250,
+                        //   top: 70,
+                        //   child: Container(
+                        //     width: 90,
+                        //     height: 90,
+                        //     decoration: BoxDecoration(
+                        //       image: DecorationImage(
+                        //         image: AssetImage("images/roof.png"),
+                        //         fit: BoxFit.fill,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Row(children: [
@@ -931,9 +947,6 @@ class NextPage2 extends StatelessWidget {
                           );
                         },
                       );
-                      // for (var i = 0; i < addorders.length; i++) {
-                      //   await addorderFirebase(addorders[i]);
-                      // }
                     },
                     style: ButtonStyle(
                       elevation: MaterialStateProperty.all(
@@ -947,14 +960,7 @@ class NextPage2 extends StatelessWidget {
                 ),
               ],
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     Text(
-            //       "By s.charoen",
-            //       style: TextStyle(color: Colors.grey),
-            //     )
-            //   ],
+
             // ),
           ],
         ),

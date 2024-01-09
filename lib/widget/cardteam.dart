@@ -146,6 +146,12 @@ class CardTeam extends StatelessWidget {
                                                       .data![index].firstname,
                                                   Lastname: snapshot
                                                       .data![index].lastname,
+                                                  Email:
+                                                      snapshot.data![index].email,
+                                                  Phone:snapshot.data![index].phone,
+                                                  Address: snapshot.data![index].address,
+                                                  Role: snapshot.data![index].role,
+                                                  Status: snapshot.data![index].status
                                                 ),
                                               ),
                                             );
@@ -193,7 +199,12 @@ class Teamdetail extends StatelessWidget {
   final String? emId;
   final String? Firstname;
   final String? Lastname;
-  Teamdetail({super.key, this.emId, this.Firstname, this.Lastname});
+  final String? Email;
+  final String? Phone;
+  final String? Address;
+  final String? Role;
+  final bool? Status;
+  Teamdetail({super.key, this.emId, this.Firstname, this.Lastname, this.Email, this.Phone, this.Address, this.Role, this.Status});
 
   @override
   Widget build(BuildContext context) {
@@ -242,15 +253,51 @@ class Teamdetail extends StatelessWidget {
                     
                     ],
                   ),
-               
-              SizedBox(height: 35,),
-                Text("${Firstname}"+"  "+"${Lastname}",style: TextStyle(fontSize: 28),),
-                Text("รหัสพนักงาน: "+"${emId}")
+                   SizedBox(height: 10),
+                     Text("${Firstname} ${Lastname}", style: TextStyle(fontSize: 20, color: const Color.fromARGB(255, 0, 0, 0))),
+               Container(
+  padding: EdgeInsets.all(16),  // Add padding for spacing
+  decoration: BoxDecoration(
+    border: Border.all(
+      color: Colors.grey,  // Set border color
+      width: 2.0,          // Set border width
+    ),
+    borderRadius: BorderRadius.circular(10),  // Add rounded corners
+  ),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text("${Email}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+     
+   
+      Text("รหัสพนักงาน: ${emId}", style: TextStyle(color: const Color.fromARGB(255, 119, 119, 119))),
+      Text("${Role}", style: TextStyle(color: const Color.fromARGB(255, 121, 121, 121))),
+      Text("เบอร์โทร: ${Phone}"),
+      Text("ที่อยู่: ${Address}"),
+    ],
+  ),
+)
+
+                
                  ],
               ),
             ],
           ),
         ),
+          floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          onPressed: () {
+          
+            // Navigator.push(
+            //         context,
+            //         MaterialPageRoute(builder: (context) => AddUserScreen()),
+            //       );
+          },
+          child: Icon(Icons.edit,color: Color.fromARGB(255, 136, 135, 135),
+          size: 30,
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       
     );
   }

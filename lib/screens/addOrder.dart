@@ -193,7 +193,7 @@ class _addOrderState extends State<addOrder> {
                                       }),
                                     );
                                   },
-                                  child: Text('ยืนยัน'),
+                                  child: Text('ยืนยัน',style: TextStyle(color: Colors.green),),
                                 ),
                               ],
                             );
