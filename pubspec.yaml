@@ -50,6 +50,7 @@ dependencies:
   email_validator: ^2.1.17
   logger: ^2.0.2+1
   intl: ^0.18.1
+  page_transition: ^2.1.0
 flutter_launcher_icons:
   android: true
   ios: true
