@@ -249,20 +249,20 @@ class _HomepageState extends State<Homepage> {
                 );
               },
             ),
-            ListTile(
-              title: Text('เพิ่มรายการผลิต'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    // addOrderId();
-                    return addOrder(
-                      fullname: fullname,
-                    );
-                  }),
-                );
-              },
-            ),
+            // ListTile(
+            //   title: Text('เพิ่มรายการผลิต'),
+            //   onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) {
+            //         // addOrderId();
+            //         return addOrder(
+            //           fullname: fullname,
+            //         );
+            //       }),
+            //     );
+            //   },
+            // ),
             SizedBox(
               height: 350,
             ),

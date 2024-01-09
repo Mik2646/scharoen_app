@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:scharoen_app/screens/auth.dart';
 
-
 class addOrder extends StatefulWidget {
   addOrder({super.key, this.fullname});
   String? fullname;
@@ -13,28 +12,28 @@ class addOrder extends StatefulWidget {
 
 class _addOrderState extends State<addOrder> {
   int amount = 1;
-  String? orderId;
+  String? orderIds;
   String? counts = "000";
   int amountcover = 1;
 
-  Future addOrderId() async {
+  Future<void> addOrderId() async {
     await FirebaseFirestore.instance
         .collection("oder_item")
         .get()
         .then((value) {
-      if (value != null) {
-        int size = value.size;
-        size ??= 0;
-        setState(() {
-          orderId = "$counts$size";
-        });
+      int size = 0;
+      if (value.size != 0) {
+        size = value.size;
       }
+      setState(() {
+        orderIds = "$counts$size";
+      });
     });
     var now = DateTime.now();
     var dfm = DateFormat('dd-MM-yyyy');
     String dateFormat = dfm.format(now);
     await FirebaseFirestore.instance.collection("oder_item").add({
-      "id": "$orderId",
+      "id": "$orderIds",
       "date": dateFormat,
       "orderitem_status": "pending",
       "create_by": widget.fullname
@@ -90,7 +89,7 @@ class _addOrderState extends State<addOrder> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("เพิ่มรายการผลิต $orderId"),
+          title: Text("เพิ่มรายการผลิต"),
           actions: [
             IconButton(
               icon: Image.network(
@@ -173,9 +172,10 @@ class _addOrderState extends State<addOrder> {
                                 ),
                                 TextButton(
                                   onPressed: () async {
+                                    await addOrderId();
                                     for (var i = 0; i < addorders.length; i++) {
                                       await addorderFirebase(
-                                          addorders[i], orderId);
+                                          addorders[i], orderIds);
                                     }
                                     Navigator.of(context)
                                         .pop(); // Close the dialog
@@ -189,7 +189,6 @@ class _addOrderState extends State<addOrder> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) {
-                                        addOrderId();
                                         return Authenticationsceen();
                                       }),
                                     );

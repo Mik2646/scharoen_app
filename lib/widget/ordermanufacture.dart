@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:scharoen_app/models/OderItem.dart';
 import 'package:scharoen_app/screens/Homepage.dart';
@@ -16,7 +17,7 @@ class ordermanufacture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Ordermanufacture db = Ordermanufacture.instance;
+    Ordermanufacture? db = Ordermanufacture.instance;
     Stream<List<Orderitem>>? stream = db.getordermanufacture();
 
     return Container(
@@ -85,7 +86,7 @@ class ordermanufacture extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Row(children: [
-                            Text('เวลา'),
+                            Text('เวลา ${snapshot.data![index].dates}'),
                           ]),
                         ),
                         Padding(
@@ -168,12 +169,10 @@ class NextPage extends StatelessWidget {
   final String? orderId;
   final String? lengthCover;
   final String? colorRoof;
-  
-  
-
+  CollectionReference orders = FirebaseFirestore.instance.collection("order");
   NextPage({Key? key, this.orderId, this.lengthCover, this.colorRoof})
       : super(key: key);
-      
+
   final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
@@ -358,138 +357,162 @@ class NextPage extends StatelessWidget {
           ],
         ),
       ),
-      body: ListView(children: [
-        Column(
-          children: [
-            Container(
-              width: 383,
-              height: 696,
-              child: Stack(
+      body: StreamBuilder(
+          stream:
+              orders.where("order_itemId", isEqualTo: "$orderId").snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong');
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+              return Center(
+                child: Text("ไม่พบรายการ"),
+              );
+            }
+            if (snapshot.hasData) {
+              return Column(
                 children: [
-                  Positioned(
-                    left: 250,
-                    top: 70,
-                    child: Container(
-                      width: 90,
-                      height: 90,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("images/roof.png"),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 20,
-                    top: 30,
-                    child: Text(
-                      'หมายเลขออเดอร์ :',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 180,
-                    top: 35,
-                    child: Text(
-                      '${orderId}',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 30,
-                    top: 79,
-                    child: Text(
-                      '⎯ สี${colorRoof}',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 352,
-                    top: 40,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: ShapeDecoration(
-                        color: Color(0xFFFDA726),
-                        shape: OvalBorder(),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 25,
-                    top: 166,
-                    child: Text(
-                      'รายการผลิต',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-      
-                  Positioned(
-                    left: 45,
-                    top: 211,
-                    child: Column(
+                  Container(
+                    width: 383,
+                    height: 696,
+                    child: Stack(
                       children: [
-                        Container(
-                          width: 310,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Positioned(
+                          left: 250,
+                          top: 70,
+                          child: Container(
+                            width: 90,
+                            height: 90,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage("images/roof.png"),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 20,
+                          top: 30,
+                          child: Text(
+                            'หมายเลขออเดอร์ :',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontFamily: 'Josefin Sans',
+                              fontWeight: FontWeight.w400,
+                              height: 0,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 180,
+                          top: 35,
+                          child: Text(
+                            '${orderId}',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontFamily: 'Josefin Sans',
+                              fontWeight: FontWeight.w400,
+                              height: 0,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 30,
+                          top: 79,
+                          child: Text(
+                            '⎯ สี${snapshot.data!.docs[0]['color_roof']}',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: 'Josefin Sans',
+                              fontWeight: FontWeight.w400,
+                              height: 0,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 352,
+                          top: 40,
+                          child: Container(
+                            width: 10,
+                            height: 10,
+                            decoration: ShapeDecoration(
+                              color: Color(0xFFFDA726),
+                              shape: OvalBorder(),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 25,
+                          top: 166,
+                          child: Text(
+                            'รายการผลิต',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontFamily: 'Josefin Sans',
+                              fontWeight: FontWeight.w400,
+                              height: 0,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 45,
+                          top: 211,
+                          child: Column(
                             children: [
-                              Text(
-                                '1.',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontFamily: 'Josefin Sans',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              ),
-                              Checkbox(
-                                value: true,
-                                onChanged: (bool? value) {
-                                  value = true;
+                              ListView.builder(
+                                itemCount: snapshot.data!.docs.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    width: 310,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '1.',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontFamily: 'Josefin Sans',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0,
+                                          ),
+                                        ),
+                                        Checkbox(
+                                          value: true,
+                                          onChanged: (bool? value) {
+                                            value = true;
+                                          },
+                                          activeColor: Colors.green,
+                                        ),
+                                      ],
+                                    ),
+                                  );
                                 },
-                                activeColor: Colors.green,
-                              ),
+                              )
                             ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-
-                 
+                  )
                 ],
-              ),
-            )
-          ],
-        ),
-      ]),
+              );
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
       bottomNavigationBar: Container(
         height: 80,
         child: Column(
@@ -512,13 +535,10 @@ class NextPage extends StatelessWidget {
                 InkWell(
                   child: ElevatedButton(
                     onPressed: () async {
-                        Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            NextPage2()),
-                                  );
-                    
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => NextPage2()),
+                      );
                     },
                     style: ButtonStyle(
                       elevation: MaterialStateProperty.all(
@@ -532,7 +552,6 @@ class NextPage extends StatelessWidget {
                 ),
               ],
             ),
-          
           ],
         ),
       ),
@@ -540,30 +559,29 @@ class NextPage extends StatelessWidget {
   }
 }
 
-
 class NextPage2 extends StatelessWidget {
   final String? orderId;
 
-
-  NextPage2({Key? key, this.orderId,})
-      : super(key: key);
+  NextPage2({
+    Key? key,
+    this.orderId,
+  }) : super(key: key);
   final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        elevation:
-            2.5, 
+        elevation: 2.5,
         shadowColor:
             const Color.fromARGB(255, 0, 0, 0), // สีของเงาที่คุณต้องการ
-        toolbarHeight: 70.0, 
+        toolbarHeight: 70.0,
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
               icon: Icon(Icons.menu),
               onPressed: () {
-                Scaffold.of(context).openDrawer(); 
+                Scaffold.of(context).openDrawer();
               },
             );
           },
@@ -807,48 +825,42 @@ class NextPage2 extends StatelessWidget {
                       ),
                     ),
                   ),
-                
-      
-           
-
-                 
                 ],
               ),
             ),
             Container(
-width: 292,
-height: 179,
-decoration: ShapeDecoration(
-color: Colors.white,
-shape: RoundedRectangleBorder(
-side: BorderSide(width: 1, color: Color(0xFFABABAB)),
-borderRadius: BorderRadius.circular(10),
-
-),
-),
-child: Padding(
-  padding: const EdgeInsets.all(8.0),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      IconButton(
-                    icon: Image.network(
-                      'https://cdn-icons-png.flaticon.com/128/7245/7245585.png',
-                      width: 37,
-                      height: 37,
-                      color: Color.fromARGB(255, 135, 135, 135),
+              width: 292,
+              height: 179,
+              decoration: ShapeDecoration(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(width: 1, color: Color(0xFFABABAB)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      icon: Image.network(
+                        'https://cdn-icons-png.flaticon.com/128/7245/7245585.png',
+                        width: 37,
+                        height: 37,
+                        color: Color.fromARGB(255, 135, 135, 135),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Orderall()),
+                        );
+                      },
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Orderall()),
-                      );
-                    },
-                  ),
-    ],
-  ),
-),
-)
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ]),
@@ -879,8 +891,7 @@ child: Padding(
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text('ยืนยันการตรวจสอบ'),
-                            content:
-                                Text('คุณต้องการยืนยันการตรวจสอบหรือไม่?'),
+                            content: Text('คุณต้องการยืนยันการตรวจสอบหรือไม่?'),
                             actions: [
                               TextButton(
                                 onPressed: () {
