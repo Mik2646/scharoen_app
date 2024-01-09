@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
@@ -18,7 +19,7 @@ class ordermanufacture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Ordermanufacture db = Ordermanufacture.instance;
+    Ordermanufacture? db = Ordermanufacture.instance;
     Stream<List<Orderitem>>? stream = db.getordermanufacture();
 
     return Container(
@@ -82,27 +83,26 @@ class ordermanufacture extends StatelessWidget {
                                 ),
                               ),
                             ),
-              
                           ],
                         ),
-                  //                      Positioned(
-                  //   left: 250,
-                  //   top: 70,
-                  //   child: Container(
-                  //     width: 90,
-                  //     height: 90,
-                  //     decoration: BoxDecoration(
-                  //       image: DecorationImage(
-                  //         image: AssetImage("images/roof.png"),
-                  //         fit: BoxFit.fill,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+                        //                      Positioned(
+                        //   left: 250,
+                        //   top: 70,
+                        //   child: Container(
+                        //     width: 90,
+                        //     height: 90,
+                        //     decoration: BoxDecoration(
+                        //       image: DecorationImage(
+                        //         image: AssetImage("images/roof.png"),
+                        //         fit: BoxFit.fill,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Row(children: [
-                            Text('เวลา'),
+                            Text('เวลา ${snapshot.data![index].dates}'),
                           ]),
                         ),
                         Padding(
@@ -185,7 +185,7 @@ class NextPage extends StatelessWidget {
   final String? orderId;
   final String? lengthCover;
   final String? colorRoof;
-
+  CollectionReference orders = FirebaseFirestore.instance.collection("order");
   NextPage({Key? key, this.orderId, this.lengthCover, this.colorRoof})
       : super(key: key);
 
@@ -373,135 +373,162 @@ class NextPage extends StatelessWidget {
           ],
         ),
       ),
-      body: ListView(children: [
-        Column(
-          children: [
-            Container(
-              width: 383,
-              height: 696,
-              child: Stack(
+      body: StreamBuilder(
+          stream:
+              orders.where("order_itemId", isEqualTo: "$orderId").snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong');
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+              return Center(
+                child: Text("ไม่พบรายการ"),
+              );
+            }
+            if (snapshot.hasData) {
+              return Column(
                 children: [
-                  Positioned(
-                    left: 250,
-                    top: 70,
-                    child: Container(
-                      width: 90,
-                      height: 90,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("images/roof.png"),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 20,
-                    top: 30,
-                    child: Text(
-                      'หมายเลขออเดอร์ :',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 180,
-                    top: 35,
-                    child: Text(
-                      '${orderId}',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 30,
-                    top: 79,
-                    child: Text(
-                      '⎯ สี${colorRoof}',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 352,
-                    top: 40,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: ShapeDecoration(
-                        color: Color(0xFFFDA726),
-                        shape: OvalBorder(),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 25,
-                    top: 166,
-                    child: Text(
-                      'รายการผลิต',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 45,
-                    top: 211,
-                    child: Column(
+                  Container(
+                    width: 383,
+                    height: 696,
+                    child: Stack(
                       children: [
-                        Container(
-                          width: 310,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Positioned(
+                          left: 250,
+                          top: 70,
+                          child: Container(
+                            width: 90,
+                            height: 90,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage("images/roof.png"),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 20,
+                          top: 30,
+                          child: Text(
+                            'หมายเลขออเดอร์ :',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontFamily: 'Josefin Sans',
+                              fontWeight: FontWeight.w400,
+                              height: 0,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 180,
+                          top: 35,
+                          child: Text(
+                            '${orderId}',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontFamily: 'Josefin Sans',
+                              fontWeight: FontWeight.w400,
+                              height: 0,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 30,
+                          top: 79,
+                          child: Text(
+                            '⎯ สี${snapshot.data!.docs[0]['color_roof']}',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: 'Josefin Sans',
+                              fontWeight: FontWeight.w400,
+                              height: 0,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 352,
+                          top: 40,
+                          child: Container(
+                            width: 10,
+                            height: 10,
+                            decoration: ShapeDecoration(
+                              color: Color(0xFFFDA726),
+                              shape: OvalBorder(),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 25,
+                          top: 166,
+                          child: Text(
+                            'รายการผลิต',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontFamily: 'Josefin Sans',
+                              fontWeight: FontWeight.w400,
+                              height: 0,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 45,
+                          top: 211,
+                          child: Column(
                             children: [
-                              Text(
-                                '1.',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontFamily: 'Josefin Sans',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              ),
-                              Checkbox(
-                                value: true,
-                                onChanged: (bool? value) {
-                                  value = true;
+                              ListView.builder(
+                                itemCount: snapshot.data!.docs.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    width: 310,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '1.',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontFamily: 'Josefin Sans',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0,
+                                          ),
+                                        ),
+                                        Checkbox(
+                                          value: true,
+                                          onChanged: (bool? value) {
+                                            value = true;
+                                          },
+                                          activeColor: Colors.green,
+                                        ),
+                                      ],
+                                    ),
+                                  );
                                 },
-                                activeColor: Colors.green,
-                              ),
+                              )
                             ],
                           ),
                         ),
                       ],
                     ),
-                  ),
+                  )
                 ],
-              ),
-            )
-          ],
-        ),
-      ]),
+              );
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
       bottomNavigationBar: Container(
         height: 80,
         child: Column(
@@ -551,16 +578,6 @@ class NextPage extends StatelessWidget {
 class NextPage2 extends StatelessWidget {
   final String? orderId;
 
-  Future<void> _pickImage() async {
-    final imagePicker = ImagePicker();
-    final pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      // Handle the picked image, e.g., display it or upload it
-      print("Selected image path: ${pickedFile.path}");
-    }
-  }
- bool isChecked = true;
   NextPage2({
     Key? key,
     this.orderId,
@@ -850,59 +867,16 @@ class NextPage2 extends StatelessWidget {
                         color: Color.fromARGB(255, 135, 135, 135),
                       ),
                       onPressed: () {
-                        _pickImage();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Orderall()),
+                        );
                       },
                     ),
                   ],
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 40),
-              child: Row(
-                children: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType
-                                .leftToRight, // Set the transition type
-                            duration: Duration(
-                                milliseconds:
-                                    300), // Set the duration of the transition
-                            child: NextPage(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "รายการผลิตทั้งหมด",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 106, 106, 106),
-                          decoration: TextDecoration.underline,
-                        ),
-                      )),
-                ],
-              ),
-            ),
-            SizedBox(height: 20,),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-              
-              
-            SizedBox(height: 150),
-            Checkbox(
-              value: isChecked,
-              onChanged: (newValue) {
-               isChecked = true;
-
-              },
-              visualDensity: VisualDensity(vertical: 2.5, horizontal: 2.5), // Adjust the values as needed
-            ),
-            Text("ยืนยันการตรวจสอบ")
-            ],)
+            )
           ],
         ),
       ]),
@@ -986,7 +960,7 @@ class NextPage2 extends StatelessWidget {
                 ),
               ],
             ),
-    
+
             // ),
           ],
         ),
