@@ -7,6 +7,7 @@ import 'package:scharoen_app/screens/Teampage.dart';
 import 'package:scharoen_app/screens/auth.dart';
 import 'package:scharoen_app/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:scharoen_app/widget/UploadImage.dart';
 
 class ordermanufacture extends StatelessWidget {
   bool? statusUser ; 
@@ -806,19 +807,7 @@ class NextPage2 extends StatelessWidget {
                 );
               },
             ),
-            // ListTile(
-            //   title: Text('เพิ่มรายการผลิต'),
-            //   onTap: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(builder: (context) {
-            //         return addOrder(
-            //           orderIds: orderId,
-            //         );
-            //       }),
-            //     );
-            //   },
-            // ),
+    
             SizedBox(
               height: 300,
             ),
@@ -829,121 +818,7 @@ class NextPage2 extends StatelessWidget {
           ],
         ),
       ),
-      body: ListView(children: [
-        Column(
-          children: [
-            Container(
-              width: 383,
-              height: 196,
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 250,
-                    top: 70,
-                    child: Container(
-                      width: 90,
-                      height: 90,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("images/roof.png"),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 20,
-                    top: 30,
-                    child: Text(
-                      'หมายเลขออเดอร์ :',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 180,
-                    top: 35,
-                    child: Text(
-                      '${orderId}',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 30,
-                    top: 79,
-                    child: Text(
-                      '⎯ สี',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 352,
-                    top: 40,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: ShapeDecoration(
-                        color: Color(0xFFFDA726),
-                        shape: OvalBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: 292,
-              height: 179,
-              decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(width: 1, color: Color(0xFFABABAB)),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      icon: Image.network(
-                        'https://cdn-icons-png.flaticon.com/128/7245/7245585.png',
-                        width: 37,
-                        height: 37,
-                        color: Color.fromARGB(255, 135, 135, 135),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Orderall()),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ]),
+      body:UploadImageScreen(),
       bottomNavigationBar: Container(
         height: 80,
         child: Column(
