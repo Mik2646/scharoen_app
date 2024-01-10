@@ -1,3 +1,5 @@
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -11,42 +13,40 @@ class UploadImageScreen extends StatefulWidget {
 class _UploadImageScreenState extends State<UploadImageScreen> {
   final TextEditingController _imageController = TextEditingController();
 
-  Employee employee = Employee();
-
-  Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-
+  PlatformFile? image;
+  UploadTask? uploadTask;
+  String? imageUrl;
+  Future selectFile() async {
+    final img = await FilePicker.platform.pickFiles();
+    if (img == null) return;
     setState(() {
-      employee.imageUrl = pickedFile != null ? File(pickedFile.path) : null;
-      _imageController.text = employee.imageUrl != null ? employee.imageUrl!.path : '';
+      image = img.files.first;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextFormField(
-              controller: _imageController,
-              decoration: InputDecoration(labelText: 'Image Path'),
-            ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _pickImage,
-              child: Text('Pick Image'),
-            ),
-            SizedBox(height: 16.0),
-            if (employee.imageUrl != null)
-              Image.file(
-                employee.imageUrl!,
-                height: 200,
-                width: 200,
-                fit: BoxFit.cover,
-              ),
-          ],
-        
-      
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TextFormField(
+          controller: _imageController,
+          decoration: InputDecoration(labelText: 'Image Path'),
+        ),
+        SizedBox(height: 16.0),
+        ElevatedButton(
+          onPressed: selectFile,
+          child: Text('Pick Image'),
+        ),
+        // SizedBox(height: 16. 0),
+        // if (employee.imageUrl != null)
+        //   Image.file(
+        //     employee.imageUrl!,
+        //     height: 200,
+        //     width: 200,
+        //     fit: BoxFit.cover,
+        //   ),
+      ],
     );
   }
 }

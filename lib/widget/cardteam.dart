@@ -3,8 +3,8 @@ import 'package:scharoen_app/models/Employee.dart';
 import 'package:scharoen_app/service/database.dart';
 
 class CardTeam extends StatelessWidget {
-  const CardTeam({super.key});
-
+  String? role;
+  CardTeam({super.key, this.role});
   @override
   Widget build(BuildContext context) {
     Employeeall Em = Employeeall.instance;
@@ -87,7 +87,7 @@ class CardTeam extends StatelessWidget {
                                     left: 87,
                                     top: 57,
                                     child: Text(
-                                      'รหัสพนักงาน :' +
+                                      'รหัสพนักงาน  :' +
                                           snapshot.data![index].id.toString(),
                                       style: TextStyle(
                                         color: Color(0xFF808080),
@@ -140,19 +140,27 @@ class CardTeam extends StatelessWidget {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     Teamdetail(
-                                                  emId:
-                                                      snapshot.data![index].id,
-                                                  Firstname: snapshot
-                                                      .data![index].firstname,
-                                                  Lastname: snapshot
-                                                      .data![index].lastname,
-                                                  Email:
-                                                      snapshot.data![index].email,
-                                                  Phone:snapshot.data![index].phone,
-                                                  Address: snapshot.data![index].address,
-                                                  Role: snapshot.data![index].role,
-                                                  Status: snapshot.data![index].status
-                                                ),
+                                                        role: role,
+                                                        emId: snapshot
+                                                            .data![index].id,
+                                                        Firstname: snapshot
+                                                            .data![index]
+                                                            .firstname,
+                                                        Lastname: snapshot
+                                                            .data![index]
+                                                            .lastname,
+                                                        Email: snapshot
+                                                            .data![index].email,
+                                                        Phone: snapshot
+                                                            .data![index].phone,
+                                                        Address: snapshot
+                                                            .data![index]
+                                                            .address,
+                                                        Role: snapshot
+                                                            .data![index].role,
+                                                        Status: snapshot
+                                                            .data![index]
+                                                            .status),
                                               ),
                                             );
                                           },
@@ -196,6 +204,7 @@ class CardTeam extends StatelessWidget {
 }
 
 class Teamdetail extends StatelessWidget {
+  final String? role;
   final String? emId;
   final String? Firstname;
   final String? Lastname;
@@ -204,101 +213,116 @@ class Teamdetail extends StatelessWidget {
   final String? Address;
   final String? Role;
   final bool? Status;
-  Teamdetail({super.key, this.emId, this.Firstname, this.Lastname, this.Email, this.Phone, this.Address, this.Role, this.Status});
+  Teamdetail(
+      {super.key,
+      this.emId,
+      this.Firstname,
+      this.Lastname,
+      this.Email,
+      this.Phone,
+      this.role,
+      this.Address,
+      this.Role,
+      this.Status});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("รายละเอียดพนักงาน")),
-      body: 
-        Center(
-          child: ListView(
-            
-            children: [
-                SizedBox(height: 30,),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Stack(
-                    children: [
-                    
-                      Container(
-                        width: 86,
-                        height:85,
-                  
+      appBar: AppBar(title: Text("รายละเอียดพนักงาน $role")),
+      body: Center(
+        child: ListView(
+          children: [
+            SizedBox(
+              height: 30,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      width: 86,
+                      height: 85,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            "https://cdn-icons-png.flaticon.com/128/848/848043.png",
+                          ),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 59,
+                      top: -2,
+                      child: Container(
+                        width: 30,
+                        height: 30,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: NetworkImage(
-                                "https://cdn-icons-png.flaticon.com/128/848/848043.png",),
+                                "https://cdn-icons-png.flaticon.com/128/9220/9220257.png"),
                             fit: BoxFit.fill,
-                            
                           ),
                         ),
                       ),
-                      Positioned(
-                        left: 59,
-                        top: -2,
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  "https://cdn-icons-png.flaticon.com/128/9220/9220257.png"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                      ),
-                    
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Text("${Firstname} ${Lastname}",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: const Color.fromARGB(255, 0, 0, 0))),
+                Container(
+                  padding: EdgeInsets.all(16), // Add padding for spacing
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey, // Set border color
+                      width: 2.0, // Set border width
+                    ),
+                    borderRadius:
+                        BorderRadius.circular(10), // Add rounded corners
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("${Email}",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                      Text("รหัสพนักงาน: ${emId}",
+                          style: TextStyle(
+                              color: const Color.fromARGB(255, 119, 119, 119))),
+                      Text("${Role}",
+                          style: TextStyle(
+                              color: const Color.fromARGB(255, 121, 121, 121))),
+                      Text("เบอร์โทร: ${Phone}"),
+                      Text("ที่อยู่: ${Address}"),
                     ],
                   ),
-                   SizedBox(height: 10),
-                     Text("${Firstname} ${Lastname}", style: TextStyle(fontSize: 20, color: const Color.fromARGB(255, 0, 0, 0))),
-               Container(
-  padding: EdgeInsets.all(16),  // Add padding for spacing
-  decoration: BoxDecoration(
-    border: Border.all(
-      color: Colors.grey,  // Set border color
-      width: 2.0,          // Set border width
-    ),
-    borderRadius: BorderRadius.circular(10),  // Add rounded corners
-  ),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text("${Email}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-     
-   
-      Text("รหัสพนักงาน: ${emId}", style: TextStyle(color: const Color.fromARGB(255, 119, 119, 119))),
-      Text("${Role}", style: TextStyle(color: const Color.fromARGB(255, 121, 121, 121))),
-      Text("เบอร์โทร: ${Phone}"),
-      Text("ที่อยู่: ${Address}"),
-    ],
-  ),
-)
-
-                
-                 ],
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: role == 'ผู้บริหาร'
+          ? FloatingActionButton(
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+              onPressed: () {
+                // Navigator.push(
+                //         context,
+                //         MaterialPageRoute(builder: (context) => AddUserScreen()),
+                //       );
+              },
+              child: Icon(
+                Icons.edit,
+                color: Color.fromARGB(255, 136, 135, 135),
+                size: 30,
               ),
-            ],
-          ),
-        ),
-          floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-          onPressed: () {
-          
-            // Navigator.push(
-            //         context,
-            //         MaterialPageRoute(builder: (context) => AddUserScreen()),
-            //       );
-          },
-          child: Icon(Icons.edit,color: Color.fromARGB(255, 136, 135, 135),
-          size: 30,
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      
+            )
+          : SizedBox(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
