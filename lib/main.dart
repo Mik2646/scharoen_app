@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 
 import 'package:scharoen_app/screens/auth.dart';
 
-import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -39,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   _loadMainScreen() async {
     // ทำการ delay เป็นเวลา 2 วินาที
-    await Future.delayed(Duration(milliseconds: 60));
+    await Future.delayed(Duration(seconds: 1));
 
     // เปลี่ยนหน้าไปที่หน้าหลัก
     Navigator.pushReplacement(
