@@ -26,9 +26,9 @@ class _HomepageState extends State<Homepage> {
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   // final AuthenticationService auth;
-  int employeeCount = 10;
+  int employeeCount = 0;
   bool isSwitchOn = false;
-
+  String? role;
   CollectionReference? user = FirebaseFirestore.instance.collection("employee");
   Employee? employees = Employee();
   String? fullname;
@@ -47,6 +47,7 @@ class _HomepageState extends State<Homepage> {
         }
       });
     }
+    getCount();
   }
 
   void getUser() async {
@@ -58,13 +59,25 @@ class _HomepageState extends State<Homepage> {
           for (var element in value.docs) {
             setState(() {
               fullname = "${element['name']} ${element['lastname']}";
+              isSwitchOn = element['status'];
+              role = element['role'];
             });
           }
+          print(role);
         });
       }
     } else {
       return;
     }
+  }
+
+  void getCount() async {
+    await user?.where("status", isEqualTo: true).get().then((value) {
+      setState(() {
+        employeeCount = value.size;
+      });
+      print(value.size);
+    });
   }
 
   // Future addOrderId() async {
@@ -90,9 +103,10 @@ class _HomepageState extends State<Homepage> {
   //     "create_by": fullname
   //   });
   // }
-
+  @override
   void initState() {
     super.initState();
+    getCount();
     getUser();
   }
 
@@ -236,7 +250,10 @@ class _HomepageState extends State<Homepage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MyWidget()),
+                  MaterialPageRoute(
+                      builder: (context) => MyWidget(
+                            role: role,
+                          )),
                 );
               },
             ),
@@ -275,7 +292,11 @@ class _HomepageState extends State<Homepage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
-        child: ordermanufacture(),
+        child: !isSwitchOn
+            ? Center(
+                child: Text("ไม่ได้ทำงานนะจ๊ะ"),
+              )
+            : ordermanufacture(),
       ),
       //  Padding(
       //   padding: const EdgeInsets.all(18.0),
@@ -308,7 +329,7 @@ class _HomepageState extends State<Homepage> {
       bottomNavigationBar: BottomMenu(
           bottomMenuEmployeeCount: employeeCount,
           isSwitchOn: isSwitchOn,
-          onSwitchChanged: (value) {
+          onSwitchChanged: (value) async {
             setState(() {
               isSwitchOn = value;
             });
