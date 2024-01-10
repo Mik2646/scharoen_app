@@ -1,21 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:scharoen_app/models/OderItem.dart';
-import 'package:scharoen_app/screens/Homepage.dart';
 import 'package:scharoen_app/screens/Orderall.dart';
 import 'package:scharoen_app/screens/Profile.dart';
 import 'package:scharoen_app/screens/Teampage.dart';
-import 'package:scharoen_app/screens/addOrder.dart';
 import 'package:scharoen_app/screens/auth.dart';
 import 'package:scharoen_app/service/database.dart';
-import 'package:scharoen_app/models/Orderall.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
+import 'package:scharoen_app/widget/UploadImage.dart';
 
 class ordermanufacture extends StatelessWidget {
-  const ordermanufacture({Key? key}) : super(key: key);
+  bool? statusUser ; 
+  String? name;
+   ordermanufacture({Key? key,this.statusUser,this.name}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +151,10 @@ class ordermanufacture extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => NextPage(
+                                        statusUser: statusUser,
                                         orderId: snapshot.data![index].id,
+                                        statusorder: snapshot
+                                            .data![index].orderitem_status,
                                         // lengthCover:
                                         //     snapshot.data![index].length_cover,
                                         // colorRoof:
@@ -185,8 +185,16 @@ class NextPage extends StatelessWidget {
   final String? orderId;
   final String? lengthCover;
   final String? colorRoof;
+  final bool? statusUser;
+  final String? statusorder;
   CollectionReference orders = FirebaseFirestore.instance.collection("order");
-  NextPage({Key? key, this.orderId, this.lengthCover, this.colorRoof})
+  NextPage(
+      {Key? key,
+      this.statusUser,
+      this.orderId,
+      this.lengthCover,
+      this.colorRoof,
+      this.statusorder})
       : super(key: key);
 
   final _auth = FirebaseAuth.instance;
@@ -233,18 +241,19 @@ class NextPage extends StatelessWidget {
                     fontSize: 14,
                   ),
                 ), // ชื่อ
+                       
               ],
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(bottom: 5),
-            //   child: Text(
-            //   isSwitchOn ? '•' : '•',
-            //   style: TextStyle(
-            //     color: isSwitchOn ? Colors.green : const Color.fromARGB(255, 103, 103, 103),
-            //     fontSize: 38.0,
-            //   ),
-            //               ),
-            // ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(
+                        statusUser! ? '•' : '•',
+                        style: TextStyle(
+                          color: statusUser! ? Color(0xFF23E41F) : const Color.fromARGB(255, 103, 103, 103),
+                          fontSize: 38.0,
+                        ),
+                                    ),
+              ),
           ],
         ),
         actions: [
@@ -299,13 +308,13 @@ class NextPage extends StatelessWidget {
                         _auth.currentUser!.email.toString(),
                         style: TextStyle(fontSize: 15),
                       ),
-                      //        Text(
-                      // isSwitchOn ? '•' : '•',
-                      // style: TextStyle(
-                      //   color: isSwitchOn ? Color(0xFF23E41F) : const Color.fromARGB(255, 103, 103, 103),
-                      //   fontSize: 24.0,
-                      // ),
-                      //             ),
+                             Text(
+                      statusUser! ? '•' : '•',
+                      style: TextStyle(
+                        color: statusUser! ? Color(0xFF23E41F) : const Color.fromARGB(255, 103, 103, 103),
+                        fontSize: 24.0,
+                      ),
+                                  ),
                     ],
                   ),
                 ],
@@ -391,138 +400,194 @@ class NextPage extends StatelessWidget {
               );
             }
             if (snapshot.hasData) {
-              return Column(
-                children: [
-                  Container(
-                    width: 383,
-                    height: 696,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          left: 250,
-                          top: 70,
-                          child: Container(
-                            width: 90,
-                            height: 90,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage("images/roof.png"),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: 20,
-                          top: 30,
-                          child: Text(
-                            'หมายเลขออเดอร์ :',
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(28.0),
+                  child: Column(
+                    children: [
+                    
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("หมายเลขออเดอร์ : ${orderId}",style: TextStyle(fontSize: 18),),
+                          Text(
+                            statusorder.toString() == 'pending'
+                                ? '•'
+                                : statusorder.toString() == 'inprogress'
+                                    ? '•'
+                                    : statusorder.toString() == 'Successfullycompleted'
+                                        ? '•'
+                                        : '•',
                             style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontFamily: 'Josefin Sans',
-                              fontWeight: FontWeight.w400,
-                              height: 0,
+                              color: statusorder.toString() == 'pending'
+                                  ? Color.fromARGB(227, 232, 192, 47)
+                                  : statusorder.toString() == 'inprogress'
+                                      ? Colors.orange
+                                      : statusorder.toString() == 'Successfullycompleted'
+                                          ? const Color.fromARGB(255, 95, 218, 99)
+                                          : Colors.black,
+                              fontSize: 40.0,
+                            ),
+                          ),
+
+                        ],
+                      ),
+                      Row(children: [
+                        Text("⎯  ${snapshot.data!.docs[0]['color_roof']} ${snapshot.data!.docs[0]['size_roof']}  ${snapshot.data!.docs[0]['brand_roof']}"),
+                      
+                      ],),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                        
+                          Container(
+                          width: 85,
+                          height: 85,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage("images/roof.png"),
+                              fit: BoxFit.fill,
                             ),
                           ),
                         ),
-                        Positioned(
-                          left: 180,
-                          top: 35,
-                          child: Text(
-                            '${orderId}',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontFamily: 'Josefin Sans',
-                              fontWeight: FontWeight.w400,
-                              height: 0,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: 30,
-                          top: 79,
-                          child: Text(
-                            '⎯ สี${snapshot.data!.docs[0]['color_roof']}',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontFamily: 'Josefin Sans',
-                              fontWeight: FontWeight.w400,
-                              height: 0,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: 352,
-                          top: 40,
-                          child: Container(
-                            width: 10,
-                            height: 10,
-                            decoration: ShapeDecoration(
-                              color: Color(0xFFFDA726),
-                              shape: OvalBorder(),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: 25,
-                          top: 166,
-                          child: Text(
-                            'รายการผลิต',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontFamily: 'Josefin Sans',
-                              fontWeight: FontWeight.w400,
-                              height: 0,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: 45,
-                          top: 211,
-                          child: Column(
-                            children: [
-                              ListView.builder(
-                                itemCount: snapshot.data!.docs.length,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    width: 310,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          '1.',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontFamily: 'Josefin Sans',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0,
-                                          ),
-                                        ),
-                                        Checkbox(
-                                          value: true,
-                                          onChanged: (bool? value) {
-                                            value = true;
-                                          },
-                                          activeColor: Colors.green,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                      ],),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                        Text("รายการผลิต",style: TextStyle(fontSize: 16),)
+                      ],)
+                    ],
+                  ),
+                ),
+                // Container(
+                //   width: 383,
+                //   height: 696,
+                //   child: Stack(
+                //     children: [
+                //       Positioned(
+                //         left: 250,
+                //         top: 70,
+                //         child: Container(
+                //           width: 90,
+                //           height: 90,
+                //           decoration: BoxDecoration(
+                //             image: DecorationImage(
+                //               image: AssetImage("images/roof.png"),
+                //               fit: BoxFit.fill,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //       Positioned(
+                //         left: 20,
+                //         top: 30,
+                //         child: Text(
+                //           'หมายเลขออเดอร์ :',
+                //           style: TextStyle(
+                //             color: Colors.black,
+                //             fontSize: 20,
+                //             fontFamily: 'Josefin Sans',
+                //             fontWeight: FontWeight.w400,
+                //             height: 0,
+                //           ),
+                //         ),
+                //       ),
+                //       Positioned(
+                //         left: 180,
+                //         top: 35,
+                //         child: Text(
+                //           '${orderId}',
+                //           style: TextStyle(
+                //             color: Colors.black,
+                //             fontSize: 20,
+                //             fontFamily: 'Josefin Sans',
+                //             fontWeight: FontWeight.w400,
+                //             height: 0,
+                //           ),
+                //         ),
+                //       ),
+                //       Positioned(
+                //         left: 30,
+                //         top: 79,
+                //         child: Text(
+                //           '⎯ สี${snapshot.data!.docs[0]['color_roof']}',
+                //           style: TextStyle(
+                //             color: Colors.black,
+                //             fontSize: 16,
+                //             fontFamily: 'Josefin Sans',
+                //             fontWeight: FontWeight.w400,
+                //             height: 0,
+                //           ),
+                //         ),
+                //       ),
+                //       Positioned(
+                //         left: 352,
+                //         top: 40,
+                //         child: Container(
+                //           width: 10,
+                //           height: 10,
+                //           decoration: ShapeDecoration(
+                //             color: Color(0xFFFDA726),
+                //             shape: OvalBorder(),
+                //           ),
+                //         ),
+                //       ),
+                //       Positioned(
+                //         left: 25,
+                //         top: 166,
+                //         child: Text(
+                //           'รายการผลิต',
+                //           style: TextStyle(
+                //             color: Colors.black,
+                //             fontSize: 18,
+                //             fontFamily: 'Josefin Sans',
+                //             fontWeight: FontWeight.w400,
+                //             height: 0,
+                //           ),
+                //         ),
+                //       ),
+                //       Positioned(
+                //         left: 45,
+                //         top: 211,
+                //         child: Column(
+                //           children: [
+                //             ListView.builder(
+                //               itemCount: snapshot.data!.docs.length,
+                //               itemBuilder: (context, index) {
+                //                 return Container(
+                //                   width: 310,
+                //                   child: Row(
+                //                     mainAxisAlignment:
+                //                         MainAxisAlignment.spaceBetween,
+                //                     children: [
+                //                       Text(
+                //                         '1.',
+                //                         style: TextStyle(
+                //                           color: Colors.black,
+                //                           fontSize: 16,
+                //                           fontFamily: 'Josefin Sans',
+                //                           fontWeight: FontWeight.w400,
+                //                           height: 0,
+                //                         ),
+                //                       ),
+                //                       Checkbox(
+                //                         value: true,
+                //                         onChanged: (bool? value) {
+                //                           value = true;
+                //                         },
+                //                         activeColor: Colors.green,
+                //                       ),
+                //                     ],
+                //                   ),
+                //                 );
+                //               },
+                //             )
+                //           ],
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // )
               );
             }
             return Center(
@@ -742,19 +807,7 @@ class NextPage2 extends StatelessWidget {
                 );
               },
             ),
-            // ListTile(
-            //   title: Text('เพิ่มรายการผลิต'),
-            //   onTap: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(builder: (context) {
-            //         return addOrder(
-            //           orderIds: orderId,
-            //         );
-            //       }),
-            //     );
-            //   },
-            // ),
+    
             SizedBox(
               height: 300,
             ),
@@ -765,121 +818,7 @@ class NextPage2 extends StatelessWidget {
           ],
         ),
       ),
-      body: ListView(children: [
-        Column(
-          children: [
-            Container(
-              width: 383,
-              height: 196,
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 250,
-                    top: 70,
-                    child: Container(
-                      width: 90,
-                      height: 90,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("images/roof.png"),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 20,
-                    top: 30,
-                    child: Text(
-                      'หมายเลขออเดอร์ :',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 180,
-                    top: 35,
-                    child: Text(
-                      '${orderId}',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 30,
-                    top: 79,
-                    child: Text(
-                      '⎯ สี',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 352,
-                    top: 40,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: ShapeDecoration(
-                        color: Color(0xFFFDA726),
-                        shape: OvalBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: 292,
-              height: 179,
-              decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(width: 1, color: Color(0xFFABABAB)),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      icon: Image.network(
-                        'https://cdn-icons-png.flaticon.com/128/7245/7245585.png',
-                        width: 37,
-                        height: 37,
-                        color: Color.fromARGB(255, 135, 135, 135),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Orderall()),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ]),
+      body:UploadImageScreen(),
       bottomNavigationBar: Container(
         height: 80,
         child: Column(

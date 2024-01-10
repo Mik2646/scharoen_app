@@ -25,6 +25,7 @@ class _AuthenticationServiceState extends State<Authenticationsceen> {
     super.initState();
     auth = AuthenticationService();
     user = auth.authStateChanges();
+    
   }
 
  @override

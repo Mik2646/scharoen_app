@@ -59,7 +59,7 @@ class BottomMenu extends StatelessWidget {
                               onChanged: (value) {
                                 onSwitchChanged(value);
                               },
-                              activeTrackColor: Colors.green,
+                              activeTrackColor: Color.fromARGB(255, 28, 197, 26),
                               activeColor: Colors.white,
                             ),
                           ),
@@ -81,31 +81,6 @@ class BottomMenu extends StatelessWidget {
     );
   }
 }
-//     return ClipRect(
-//       child: BottomAppBar(
-//         color: Color.fromARGB(221, 255, 255, 255),
-//         height: 93,
-//         elevation: 5.0, // ตั้งค่า elevation เป็น 0.0 เพื่อป้องกันการปรากฎเงาด้านบน
-//         shadowColor: const Color.fromARGB(255, 0, 0, 0), // สีของเงาที่คุณต้องการ
-
-//         child: Padding(
-//           padding: const EdgeInsets.only(left: 10),
-//           child: Column(
-
-//             children: [
-//              Row(
-//                children: [
-//                  Text('จำนวนพนักงานวันนี้:',style: TextStyle(fontSize: 12),),
-//                ],
-//              ),
-
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-// }
-// }
 
 class bottomtexts extends StatelessWidget {
   const bottomtexts({super.key});

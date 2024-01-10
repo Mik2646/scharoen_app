@@ -228,7 +228,7 @@ class Teamdetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("รายละเอียดพนักงาน $role")),
+      appBar: AppBar(title: Text("รายละเอียดพนักงาน ")),
       body: Center(
         child: ListView(
           children: [

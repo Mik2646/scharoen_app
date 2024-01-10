@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:scharoen_app/models/Employee.dart';
 import 'package:scharoen_app/screens/Orderall.dart';
 import 'package:scharoen_app/screens/Profile.dart';
-import 'package:scharoen_app/screens/addEmployee.dart';
 import 'package:scharoen_app/screens/addOrder.dart';
 import 'package:scharoen_app/service/Authentication.dart';
 import 'package:scharoen_app/widget/BottomMenu.dart';
@@ -161,7 +159,7 @@ class _HomepageState extends State<Homepage> {
                 isSwitchOn ? '•' : '•',
                 style: TextStyle(
                   color: isSwitchOn
-                      ? Colors.green
+                      ?Color(0xFF23E41F)
                       : const Color.fromARGB(255, 103, 103, 103),
                   fontSize: 38.0,
                 ),
@@ -294,9 +292,16 @@ class _HomepageState extends State<Homepage> {
         padding: const EdgeInsets.all(18.0),
         child: !isSwitchOn
             ? Center(
-                child: Text("ไม่ได้ทำงานนะจ๊ะ"),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Image.asset("images/logoscaroen.png",color: const Color.fromARGB(255, 227, 227, 227),),
+                    Text("ไม่ได้ทำงาน... ",style: TextStyle(color: Colors.grey),),
+                  ],
+                ),
               )
-            : ordermanufacture(),
+            : ordermanufacture(statusUser: isSwitchOn,),
       ),
       //  Padding(
       //   padding: const EdgeInsets.all(18.0),
