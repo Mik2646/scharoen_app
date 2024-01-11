@@ -14,6 +14,7 @@ class ordermanufacture extends StatelessWidget {
   String?  username;
    ordermanufacture({Key? key,this.statusUser,this.username, }) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     Ordermanufacture? db = Ordermanufacture.instance;
@@ -244,19 +245,20 @@ class NextPage extends StatelessWidget {
                     fontSize: 14,
                   ),
                 ), // ชื่อ
-                       
               ],
             ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Text(
-                        statusUser! ? '•' : '•',
-                        style: TextStyle(
-                          color: statusUser! ? Color(0xFF23E41F) : const Color.fromARGB(255, 103, 103, 103),
-                          fontSize: 38.0,
-                        ),
-                                    ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(
+                statusUser! ? '•' : '•',
+                style: TextStyle(
+                  color: statusUser!
+                      ? Color(0xFF23E41F)
+                      : const Color.fromARGB(255, 103, 103, 103),
+                  fontSize: 38.0,
+                ),
               ),
+            ),
           ],
         ),
         actions: [
@@ -311,13 +313,15 @@ class NextPage extends StatelessWidget {
                        ("${username}"),
                         style: TextStyle(fontSize: 15),
                       ),
-                             Text(
-                      statusUser! ? '•' : '•',
-                      style: TextStyle(
-                        color: statusUser! ? Color(0xFF23E41F) : const Color.fromARGB(255, 103, 103, 103),
-                        fontSize: 24.0,
+                      Text(
+                        statusUser! ? '•' : '•',
+                        style: TextStyle(
+                          color: statusUser!
+                              ? Color(0xFF23E41F)
+                              : const Color.fromARGB(255, 103, 103, 103),
+                          fontSize: 24.0,
+                        ),
                       ),
-                                  ),
                     ],
                   ),
                 ],
@@ -408,17 +412,20 @@ class NextPage extends StatelessWidget {
                   padding: const EdgeInsets.all(28.0),
                   child: Column(
                     children: [
-                    
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("หมายเลขออเดอร์ : ${orderId}",style: TextStyle(fontSize: 18),),
+                          Text(
+                            "หมายเลขออเดอร์ : ${orderId}",
+                            style: TextStyle(fontSize: 18),
+                          ),
                           Text(
                             statusorder.toString() == 'pending'
                                 ? '•'
                                 : statusorder.toString() == 'inprogress'
                                     ? '•'
-                                    : statusorder.toString() == 'Successfullycompleted'
+                                    : statusorder.toString() ==
+                                            'Successfullycompleted'
                                         ? '•'
                                         : '•',
                             style: TextStyle(
@@ -426,39 +433,55 @@ class NextPage extends StatelessWidget {
                                   ? Color.fromARGB(227, 232, 192, 47)
                                   : statusorder.toString() == 'inprogress'
                                       ? Colors.orange
-                                      : statusorder.toString() == 'Successfullycompleted'
-                                          ? const Color.fromARGB(255, 95, 218, 99)
+                                      : statusorder.toString() ==
+                                              'Successfullycompleted'
+                                          ? const Color.fromARGB(
+                                              255, 95, 218, 99)
                                           : Colors.black,
                               fontSize: 40.0,
                             ),
                           ),
-
                         ],
                       ),
-                      Row(children: [
-                        Text("⎯  ${snapshot.data!.docs[0]['color_roof']} ${snapshot.data!.docs[0]['size_roof']}  ${snapshot.data!.docs[0]['brand_roof']}"),
-                      
-                      ],),
+                      Row(
+                        children: [
+                          Text(
+                              "⎯  ${snapshot.data!.docs[0]['color_roof']} ${snapshot.data!.docs[0]['size_roof']}  ${snapshot.data!.docs[0]['brand_roof']}"),
+                        ],
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                        
                           Container(
-                          width: 85,
-                          height: 85,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("images/roof.png"),
-                              fit: BoxFit.fill,
+                            width: 85,
+                            height: 85,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage("images/roof.png"),
+                                fit: BoxFit.fill,
+                              ),
                             ),
                           ),
-                        ),
-                      ],),
+                        ],
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                        Text("รายการผลิต",style: TextStyle(fontSize: 16),)
-                      ],)
+                          Text(
+                            "รายการผลิต",
+                            style: TextStyle(fontSize: 16),
+                          )
+                        ],
+                      ),
+                      Container(
+                        height: 300,
+                        child: ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              return Text(
+                                  "${index + 1}. ${snapshot.data!.docs[index]['typeroof']}");
+                            }),
+                      )
                     ],
                   ),
                 ),
@@ -493,8 +516,13 @@ class NextPage extends StatelessWidget {
                     onPressed: () async {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => NextPage2(  username: username,
-                                        statusUser: statusUser,)),
+                        MaterialPageRoute(
+                            builder: (context) => NextPage2(
+                                  orderId: orderId,
+                                  colorRoof: "สีแดง",
+                                )),
+
+
                       );
                     },
                     style: ButtonStyle(
@@ -518,11 +546,14 @@ class NextPage extends StatelessWidget {
 
 class NextPage2 extends StatelessWidget {
   final String? orderId;
-  final String? username;
-  final bool? statusUser;
+
+  final String? colorRoof;
+
   NextPage2({
     Key? key,
-    this.orderId, this.username, this.statusUser,
+    this.colorRoof,
+    this.orderId,
+
   }) : super(key: key);
   final _auth = FirebaseAuth.instance;
   @override
@@ -697,7 +728,6 @@ class NextPage2 extends StatelessWidget {
                 );
               },
             ),
-    
             SizedBox(
               height: 300,
             ),
@@ -708,92 +738,92 @@ class NextPage2 extends StatelessWidget {
           ],
         ),
       ),
-      body:UploadImageScreen(),
-      bottomNavigationBar: Container(
-        height: 80,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(
-                  'จาก นายอัครชัย วารีรัตน์',
-                  style: TextStyle(
-                    color: Color(0xFF808080),
-                    fontSize: 14,
-                    fontFamily: 'Josefin Sans',
-                    height: 0,
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('ยืนยันการตรวจสอบ'),
-                            content: Text('คุณต้องการยืนยันการตรวจสอบหรือไม่?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
-                                },
-                                child: Text('ยกเลิก'),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  // for (var i = 0; i < addorders.length; i++) {
-                                  //   await addorderFirebase(
-                                  //       addorders[i], widget.orderIds);
-                                  // }
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('เพิ่มออเดอร์สำเร็จ'),
-                                      backgroundColor:
-                                          Color.fromARGB(255, 104, 255, 53),
-                                    ),
-                                  );
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            Authenticationsceen()),
-                                  );
-                                },
-                                child: Text(
-                                  'ยืนยัน',
-                                  style: TextStyle(color: Colors.green),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    style: ButtonStyle(
-                      elevation: MaterialStateProperty.all(
-                          1), // ตั้งค่า elevation เป็น 0 (ไม่มีเงา)
-                    ),
-                    child: Text(
-                      'Finish',
-                      style: TextStyle(color: Colors.green),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+      body: UploadImageScreen(orderId: orderId, roofColor: colorRoof),
+      // bottomNavigationBar: Container(
+      //   height: 80,
+      //   child: Column(
+      //     children: [
+      //       Row(
+      //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //         children: [
+      //           Text(
+      //             'จาก นายอัครชัย วารีรัตน์',
+      //             style: TextStyle(
+      //               color: Color(0xFF808080),
+      //               fontSize: 14,
+      //               fontFamily: 'Josefin Sans',
+      //               height: 0,
+      //             ),
+      //           ),
+      //           SizedBox(
+      //             width: 10,
+      //           ),
+      //           InkWell(
+      //             child: ElevatedButton(
+      //               onPressed: () async {
+      //                 showDialog(
+      //                   context: context,
+      //                   builder: (BuildContext context) {
+      //                     return AlertDialog(
+      //                       title: Text('ยืนยันการตรวจสอบ'),
+      //                       content: Text('คุณต้องการยืนยันการตรวจสอบหรือไม่?'),
+      //                       actions: [
+      //                         TextButton(
+      //                           onPressed: () {
+      //                             Navigator.of(context)
+      //                                 .pop(); // Close the dialog
+      //                           },
+      //                           child: Text('ยกเลิก'),
+      //                         ),
+      //                         TextButton(
+      //                           onPressed: () async {
+      //                             // for (var i = 0; i < addorders.length; i++) {
+      //                             //   await addorderFirebase(
+      //                             //       addorders[i], widget.orderIds);
+      //                             // }
+      //                             Navigator.of(context)
+      //                                 .pop(); // Close the dialog
+      //                             ScaffoldMessenger.of(context).showSnackBar(
+      //                               SnackBar(
+      //                                 content: Text('เพิ่มออเดอร์สำเร็จ'),
+      //                                 backgroundColor:
+      //                                     Color.fromARGB(255, 104, 255, 53),
+      //                               ),
+      //                             );
+      //                             Navigator.push(
+      //                               context,
+      //                               MaterialPageRoute(
+      //                                   builder: (context) =>
+      //                                       Authenticationsceen()),
+      //                             );
+      //                           },
+      //                           child: Text(
+      //                             'ยืนยัน',
+      //                             style: TextStyle(color: Colors.green),
+      //                           ),
+      //                         ),
+      //                       ],
+      //                     );
+      //                   },
+      //                 );
+      //               },
+      //               style: ButtonStyle(
+      //                 elevation: MaterialStateProperty.all(
+      //                     1), // ตั้งค่า elevation เป็น 0 (ไม่มีเงา)
+      //               ),
+      //               child: Text(
+      //                 'Finish',
+      //                 style: TextStyle(color: Colors.green),
+      //               ),
+      //             ),
+      //           ),
+      //         ],
+      //       ),
 
-            // ),
-          ],
-        ),
-      ),
+      //       // ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }
