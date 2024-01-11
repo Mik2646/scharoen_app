@@ -151,7 +151,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
             children: [
               TextButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pop(
                     context,
                     PageTransition(
                       type: PageTransitionType

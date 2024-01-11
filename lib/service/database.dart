@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:scharoen_app/models/Orderall.dart';
 import 'package:scharoen_app/models/OderItem.dart';
 import 'package:scharoen_app/models/Employee.dart';
@@ -16,6 +13,24 @@ class Database {
     return Snapshot.map((Snapshot) {
       return Snapshot.docs.map((doc) {
         return Orderalls.fromMap(doc.data() as Map<String, dynamic>?);
+      }).toList();
+    });
+  }
+}
+class Orderitems{
+  static Orderitems instance = Orderitems._();
+  Orderitems._();
+
+  Stream<List<Orderitem>> getOrderitem() {
+    final reference = FirebaseFirestore.instance.collection('oder_item');
+
+  Query query = reference.orderBy('id', descending: true);
+
+    final Snapshot = query.snapshots();
+
+    return Snapshot.map((Snapshot) {
+      return Snapshot.docs.map((doc) {
+        return Orderitem.fromMap(doc.data() as Map<String, dynamic>?);
       }).toList();
     });
   }
