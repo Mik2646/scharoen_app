@@ -301,7 +301,7 @@ class _HomepageState extends State<Homepage> {
                   ],
                 ),
               )
-            : ordermanufacture(statusUser: isSwitchOn,),
+            : ordermanufacture(statusUser: isSwitchOn,username:fullname),
       ),
       //  Padding(
       //   padding: const EdgeInsets.all(18.0),

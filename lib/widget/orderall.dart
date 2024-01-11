@@ -208,9 +208,9 @@ class orderall extends StatelessWidget {
                    Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => NextOrderall(
+                                      builder: (context,) => NextOrderall(
                                         orderId: snapshot.data![index].id,
-                                       
+                                        date: snapshot.data![index].dates
                                       ),
                                     ),
                                   );
@@ -240,8 +240,9 @@ class NextOrderall extends StatelessWidget {
   final String? colorRoof;
   final bool? statusUser;
   final String? statusorder;
+  final  String? date;
 
-  NextOrderall({Key? key, this.orderId, this.lengthCover, this.colorRoof, this.statusUser, this.statusorder})
+  NextOrderall({Key? key, this.orderId, this.lengthCover, this.colorRoof, this.statusUser, this.statusorder, this.date})
       : super(key: key);
 CollectionReference orders = FirebaseFirestore.instance.collection("order");
     final _auth = FirebaseAuth.instance;
@@ -250,10 +251,12 @@ CollectionReference orders = FirebaseFirestore.instance.collection("order");
      return Scaffold(
            appBar: AppBar(
        
-        title: Text("ออเดอร์ที่ "+orderId!),
+        title: Text("ออเดอร์ "+orderId!),
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-         actions: [
-        
+         actions: [Padding(
+           padding: const EdgeInsets.only(right: 10),
+           child: Text(" ${date}"),
+         )
         ],
       ),
 
@@ -280,7 +283,7 @@ CollectionReference orders = FirebaseFirestore.instance.collection("order");
                   padding: const EdgeInsets.only(right:28,left: 28),
                   child: Column(
                     children: [
-                    
+                 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
