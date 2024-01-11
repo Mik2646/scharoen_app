@@ -36,7 +36,8 @@ class _addOrderState extends State<addOrder> {
       "id": "$orderIds",
       "date": dateFormat,
       "orderitem_status": "pending",
-      "create_by": widget.fullname
+      "create_by": widget.fullname,
+      "image": ""
     });
   }
 
@@ -193,7 +194,10 @@ class _addOrderState extends State<addOrder> {
                                       }),
                                     );
                                   },
-                                  child: Text('ยืนยัน',style: TextStyle(color: Colors.green),),
+                                  child: Text(
+                                    'ยืนยัน',
+                                    style: TextStyle(color: Colors.green),
+                                  ),
                                 ),
                               ],
                             );
