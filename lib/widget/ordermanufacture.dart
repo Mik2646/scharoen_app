@@ -10,9 +10,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:scharoen_app/widget/UploadImage.dart';
 
 class ordermanufacture extends StatelessWidget {
-  bool? statusUser;
-  String? name;
-  ordermanufacture({Key? key, this.statusUser, this.name}) : super(key: key);
+  bool? statusUser ; 
+  String?  username;
+   ordermanufacture({Key? key,this.statusUser,this.username, }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +100,7 @@ class ordermanufacture extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Row(children: [
-                            Text('เวลา ${snapshot.data![index].dates}'),
+                            Text('วันที่ ${snapshot.data![index].dates}'),
                           ]),
                         ),
                         Padding(
@@ -151,6 +152,7 @@ class ordermanufacture extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => NextPage(
+                                         username: username,
                                         statusUser: statusUser,
                                         orderId: snapshot.data![index].id,
                                         statusorder: snapshot
@@ -186,6 +188,7 @@ class NextPage extends StatelessWidget {
   final String? lengthCover;
   final String? colorRoof;
   final bool? statusUser;
+  final String? username;
   final String? statusorder;
   CollectionReference orders = FirebaseFirestore.instance.collection("order");
   NextPage(
@@ -194,10 +197,11 @@ class NextPage extends StatelessWidget {
       this.orderId,
       this.lengthCover,
       this.colorRoof,
-      this.statusorder})
+      this.statusorder,  this.username})
       : super(key: key);
 
   final _auth = FirebaseAuth.instance;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -236,7 +240,7 @@ class NextPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _auth.currentUser!.email.toString(),
+                  ("${username}"),
                   style: TextStyle(
                     fontSize: 14,
                   ),
@@ -306,7 +310,7 @@ class NextPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        _auth.currentUser!.email.toString(),
+                       ("${username}"),
                         style: TextStyle(fontSize: 15),
                       ),
                       Text(
@@ -481,135 +485,7 @@ class NextPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Container(
-                //   width: 383,
-                //   height: 696,
-                //   child: Stack(
-                //     children: [
-                //       Positioned(
-                //         left: 250,
-                //         top: 70,
-                //         child: Container(
-                //           width: 90,
-                //           height: 90,
-                //           decoration: BoxDecoration(
-                //             image: DecorationImage(
-                //               image: AssetImage("images/roof.png"),
-                //               fit: BoxFit.fill,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //       Positioned(
-                //         left: 20,
-                //         top: 30,
-                //         child: Text(
-                //           'หมายเลขออเดอร์ :',
-                //           style: TextStyle(
-                //             color: Colors.black,
-                //             fontSize: 20,
-                //             fontFamily: 'Josefin Sans',
-                //             fontWeight: FontWeight.w400,
-                //             height: 0,
-                //           ),
-                //         ),
-                //       ),
-                //       Positioned(
-                //         left: 180,
-                //         top: 35,
-                //         child: Text(
-                //           '${orderId}',
-                //           style: TextStyle(
-                //             color: Colors.black,
-                //             fontSize: 20,
-                //             fontFamily: 'Josefin Sans',
-                //             fontWeight: FontWeight.w400,
-                //             height: 0,
-                //           ),
-                //         ),
-                //       ),
-                //       Positioned(
-                //         left: 30,
-                //         top: 79,
-                //         child: Text(
-                //           '⎯ สี${snapshot.data!.docs[0]['color_roof']}',
-                //           style: TextStyle(
-                //             color: Colors.black,
-                //             fontSize: 16,
-                //             fontFamily: 'Josefin Sans',
-                //             fontWeight: FontWeight.w400,
-                //             height: 0,
-                //           ),
-                //         ),
-                //       ),
-                //       Positioned(
-                //         left: 352,
-                //         top: 40,
-                //         child: Container(
-                //           width: 10,
-                //           height: 10,
-                //           decoration: ShapeDecoration(
-                //             color: Color(0xFFFDA726),
-                //             shape: OvalBorder(),
-                //           ),
-                //         ),
-                //       ),
-                //       Positioned(
-                //         left: 25,
-                //         top: 166,
-                //         child: Text(
-                //           'รายการผลิต',
-                //           style: TextStyle(
-                //             color: Colors.black,
-                //             fontSize: 18,
-                //             fontFamily: 'Josefin Sans',
-                //             fontWeight: FontWeight.w400,
-                //             height: 0,
-                //           ),
-                //         ),
-                //       ),
-                //       Positioned(
-                //         left: 45,
-                //         top: 211,
-                //         child: Column(
-                //           children: [
-                //             ListView.builder(
-                //               itemCount: snapshot.data!.docs.length,
-                //               itemBuilder: (context, index) {
-                //                 return Container(
-                //                   width: 310,
-                //                   child: Row(
-                //                     mainAxisAlignment:
-                //                         MainAxisAlignment.spaceBetween,
-                //                     children: [
-                //                       Text(
-                //                         '1.',
-                //                         style: TextStyle(
-                //                           color: Colors.black,
-                //                           fontSize: 16,
-                //                           fontFamily: 'Josefin Sans',
-                //                           fontWeight: FontWeight.w400,
-                //                           height: 0,
-                //                         ),
-                //                       ),
-                //                       Checkbox(
-                //                         value: true,
-                //                         onChanged: (bool? value) {
-                //                           value = true;
-                //                         },
-                //                         activeColor: Colors.green,
-                //                       ),
-                //                     ],
-                //                   ),
-                //                 );
-                //               },
-                //             )
-                //           ],
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // )
+               
               );
             }
             return Center(
@@ -645,6 +521,8 @@ class NextPage extends StatelessWidget {
                                   orderId: orderId,
                                   colorRoof: "สีแดง",
                                 )),
+
+
                       );
                     },
                     style: ButtonStyle(
@@ -668,12 +546,14 @@ class NextPage extends StatelessWidget {
 
 class NextPage2 extends StatelessWidget {
   final String? orderId;
+
   final String? colorRoof;
 
   NextPage2({
     Key? key,
     this.colorRoof,
     this.orderId,
+
   }) : super(key: key);
   final _auth = FirebaseAuth.instance;
   @override
@@ -713,13 +593,26 @@ class NextPage2 extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _auth.currentUser!.email.toString(),
+                ("${username!}"),
                   style: TextStyle(
                     fontSize: 14,
                   ),
                 ), // ชื่อ
+
               ],
+              
             ),
+                Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(
+                        statusUser! ? '•' : '•',
+                        style: TextStyle(
+                          color: statusUser! ? Color(0xFF23E41F) : const Color.fromARGB(255, 103, 103, 103),
+                          fontSize: 38.0,
+                        ),
+                                    ),
+              ),
+            
             // Padding(
             //   padding: const EdgeInsets.only(bottom: 5),
             //   child: Text(
@@ -781,16 +674,16 @@ class NextPage2 extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        _auth.currentUser!.email.toString(),
+                       ("${username}"),
                         style: TextStyle(fontSize: 15),
                       ),
-                      //        Text(
-                      // isSwitchOn ? '•' : '•',
-                      // style: TextStyle(
-                      //   color: isSwitchOn ? Color(0xFF23E41F) : const Color.fromARGB(255, 103, 103, 103),
-                      //   fontSize: 24.0,
-                      // ),
-                      //             ),
+                             Text(
+                      statusUser!? '•' : '•',
+                      style: TextStyle(
+                        color:  statusUser! ? Color(0xFF23E41F) : const Color.fromARGB(255, 103, 103, 103),
+                        fontSize: 24.0,
+                      ),
+                                  ),
                     ],
                   ),
                 ],
