@@ -99,7 +99,7 @@ class ordermanufacture extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Row(children: [
-                            Text('เวลา ${snapshot.data![index].dates}'),
+                            Text('วันที่ ${snapshot.data![index].dates}'),
                           ]),
                         ),
                         Padding(

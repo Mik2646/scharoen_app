@@ -101,20 +101,23 @@
 // // }
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:scharoen_app/models/OderItem.dart';
 import 'package:scharoen_app/service/database.dart';
-import 'package:scharoen_app/models/Orderall.dart';
+
 
 class orderall extends StatelessWidget {
  const orderall({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-  Database db = Database.instance;
+  Orderitems db = Orderitems.instance;
 
-  Stream<List<Orderalls>> stream = db.getorderall();
+  Stream<List<Orderitem>> stream = db.getOrderitem();
     return Container(
-      child: StreamBuilder<List<Orderalls>>(
+      child: StreamBuilder<List<Orderitem>>(
         stream: stream,
         builder: (context, snapshot) {
          if(snapshot.hasData){
@@ -156,7 +159,7 @@ class orderall extends StatelessWidget {
             padding: const EdgeInsets.only(left: 10),
             child: Row(
               children: [
-                Text('- สี'+snapshot.data![index].color_roof.toString()+' '+ snapshot.data![index].size_roof.toString()+' '+snapshot.data![index].brand_roof.toString()),
+                Text('วันที่ '+snapshot.data![index].dates.toString()),
               ]
             ),
           ),
@@ -193,7 +196,7 @@ class orderall extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "จาก นายอัครชัย วารีรัตน์",
+                  "จาก "+ snapshot.data![index].create_by.toString(),
                   style: TextStyle(
                       color: const Color.fromARGB(255, 151, 151, 151)),
                 ),
@@ -207,10 +210,7 @@ class orderall extends StatelessWidget {
                                     MaterialPageRoute(
                                       builder: (context) => NextOrderall(
                                         orderId: snapshot.data![index].id,
-                                        lengthCover:
-                                            snapshot.data![index].length_cover,
-                                        colorRoof:
-                                            snapshot.data![index].color_roof,
+                                       
                                       ),
                                     ),
                                   );
@@ -238,461 +238,146 @@ class NextOrderall extends StatelessWidget {
   final String? orderId;
   final String? lengthCover;
   final String? colorRoof;
+  final bool? statusUser;
+  final String? statusorder;
 
-  NextOrderall({Key? key, this.orderId, this.lengthCover, this.colorRoof})
+  NextOrderall({Key? key, this.orderId, this.lengthCover, this.colorRoof, this.statusUser, this.statusorder})
       : super(key: key);
-  // final _auth = FirebaseAuth.instance;
+CollectionReference orders = FirebaseFirestore.instance.collection("order");
+    final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+     return Scaffold(
+           appBar: AppBar(
+       
+        title: Text("ออเดอร์ที่ "+orderId!),
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        elevation:
-            2.5, 
-        shadowColor:
-            const Color.fromARGB(255, 0, 0, 0), 
-        toolbarHeight: 70.0, 
-     title: Text(" ออเดอร์ที่ ${orderId}"),
+         actions: [
+        
+        ],
       ),
-  
-      body: Center(
-        child: Column(
-          children: [
-            Container(
-              width: 383,
-              height: 696,
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 250,
-                    top: 70,
-                    child: Container(
-                      width: 90,
-                      height: 90,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("images/roof.png"),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 20,
-                    top: 30,
-                    child: Text(
-                      'หมายเลขออเดอร์ :',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 200,
-                    top: 35,
-                    child: Text(
-                      '${orderId}',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 20,
-                    top: 635,
-                    child: Text(
-                      'จาก นายอัครชัย วารีรัตน์',
-                      style: TextStyle(
-                        color: Color(0xFF808080),
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 70,
-                    top: 79,
-                    child: Text(
-                      'สี${colorRoof}',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 50,
-                    top: 90,
-                    child: Transform(
-                      transform: Matrix4.identity()
-                        ..translate(0.0, 0.0)
-                        ..rotateZ(3.14),
-                      child: Container(
-                        width: 19,
-                        decoration: ShapeDecoration(
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              width: 1,
-                              strokeAlign: BorderSide.strokeAlignCenter,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 352,
-                    top: 40,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: ShapeDecoration(
-                        color: Color(0xFFFDA726),
-                        shape: OvalBorder(),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 50,
-                    top: 661,
-                    child: Container(
-                      width: 19,
-                      height: 18,
-                      decoration: ShapeDecoration(
-                        color: Color(0xFFD9D9D9),
-                        shape: OvalBorder(),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 77,
-                    top: 661,
-                    child: Container(
-                      width: 19,
-                      height: 18,
-                      decoration: ShapeDecoration(
-                        color: Color(0xFFD9D9D9),
-                        shape: OvalBorder(),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 258,
-                    top: 146.65,
-                    child: Transform(
-                      transform: Matrix4.identity()
-                        ..translate(0.0, 0.0)
-                        ..rotateZ(-1.50),
-                      child: Container(
-                        width: 80.87,
-                        height: 90.31,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              left: 36.03,
-                              top: 2.65,
-                              child: Transform(
-                                transform: Matrix4.identity()
-                                  ..translate(0.0, 0.0)
-                                  ..rotateZ(-2.27),
-                                child: Container(
-                                  width: 51.61,
-                                  height: 69.81,
-                                  decoration:
-                                      BoxDecoration(color: Color(0xFFE1E1E1)),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 31.41,
-                              top: -2.79,
-                              child: Transform(
-                                transform: Matrix4.identity()
-                                  ..translate(0.0, 0.0)
-                                  ..rotateZ(-0.63),
-                                child: Container(
-                                  width: 68.83,
-                                  decoration: ShapeDecoration(
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                        width: 1,
-                                        strokeAlign:
-                                            BorderSide.strokeAlignCenter,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 21.81,
-                              top: -13.69,
-                              child: Transform(
-                                transform: Matrix4.identity()
-                                  ..translate(0.0, 0.0)
-                                  ..rotateZ(-0.63),
-                                child: Container(
-                                  width: 69.30,
-                                  decoration: ShapeDecoration(
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                        width: 1,
-                                        strokeAlign:
-                                            BorderSide.strokeAlignCenter,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 10.78,
-                              top: -26.89,
-                              child: Transform(
-                                transform: Matrix4.identity()
-                                  ..translate(0.0, 0.0)
-                                  ..rotateZ(-0.67),
-                                child: Container(
-                                  width: 70.14,
-                                  decoration: ShapeDecoration(
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                        width: 1,
-                                        strokeAlign:
-                                            BorderSide.strokeAlignCenter,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 40,
-                    top: 186,
-                    child: Text(
-                      'รายการผลิต',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 40,
-                    top: 368,
-                    child: Text(
-                      'รายการผลิตครอบ',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 278,
-                    top: 645,
-                    child: Container(
-                      width: 79,
-                      height: 32,
-                      child: Stack(
+
+      body: StreamBuilder(
+          stream:
+              orders.where("order_itemId", isEqualTo: "$orderId").snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong');
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+              return Center(
+                child: Text("ไม่พบรายการ"),
+              );
+            }
+            if (snapshot.hasData) {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(right:28,left: 28),
+                  child: Column(
+                    children: [
+                    
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Positioned(
-                            left: 0,
-                            top: 0,
-                            child: Container(
-                              width: 79,
-                              height: 32,
-                              decoration: ShapeDecoration(
-                                color: Color(0xFFD9D9D9),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
+                          Text("หมายเลขออเดอร์ : ${orderId}",style: TextStyle(fontSize: 18),),
+                          Text(
+                            statusorder.toString() == 'pending'
+                                ? '•'
+                                : statusorder.toString() == 'inprogress'
+                                    ? '•'
+                                    : statusorder.toString() == 'Successfullycompleted'
+                                        ? '•'
+                                        : '•',
+                            style: TextStyle(
+                              color: statusorder.toString() == 'pending'
+                                  ? Color.fromARGB(227, 232, 192, 47)
+                                  : statusorder.toString() == 'inprogress'
+                                      ? Colors.orange
+                                      : statusorder.toString() == 'Successfullycompleted'
+                                          ? const Color.fromARGB(255, 95, 218, 99)
+                                          : Colors.black,
+                              fontSize: 40.0,
                             ),
                           ),
-                          Positioned(
-                            left: 23.88,
-                            top: 9.60,
-                            child: SizedBox(
-                              width: 37.66,
-                              height: 12.80,
-                              child: Text(
-                                'Next',
-                                style: TextStyle(
-                                  color: Color(0xFF50A02B),
-                                  fontSize: 14,
-                                  fontFamily: 'Josefin Sans',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              ),
-                            ),
-                          ),
+
                         ],
                       ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 49,
-                    top: 231,
-                    child: Text(
-                      '1.\n\n2.\n\n3.\n\n4.\n\n\n\n',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 49,
-                    top: 407,
-                    child: Text(
-                      '1.\n\n2.\n\n\n\n',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 87,
-                    top: 231,
-                    child: Text(
-                      'เเผ่นตรง 770 ซม.  จำนวน  20 เเผ่น',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 87,
-                    top: 259,
-                    child: Text(
-                      'เเผ่นโค้ง 770 ซม.  จำนวน  10 เเผ่น',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 87,
-                    top: 259,
-                    child: Text(
-                      'เเผ่นโค้ง 770 ซม.  จำนวน  10 เเผ่น',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 336,
-                    top: 229,
-                    child: Checkbox(
-                      value: true,
-                      onChanged: (bool? value) {
-                        // setState(() {
-                        //   isChecked = value ?? false;
-                        // });
-                      },
-                    ),
-                  ),
-                  Positioned(
-                    left: 336,
-                    top: 405,
-                    child: Container(
-                      width: 21,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image:
-                              NetworkImage("https://via.placeholder.com/21x20"),
-                          fit: BoxFit.fill,
+                      Row(children: [
+                        Text("⎯  ${snapshot.data!.docs[0]['color_roof']} ${snapshot.data!.docs[0]['size_roof']}  ${snapshot.data!.docs[0]['brand_roof']}"),
+                      
+                      ],),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                        
+                          Container(
+                          width: 85,
+                          height: 85,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage("images/roof.png"),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                      ],),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                        Text("รายการผลิต",style: TextStyle(fontSize: 16),)
+                      ],)
+                    ],
                   ),
-                  Positioned(
-                    left: 336,
-                    top: 255,
-                    child: Container(
-                      width: 21,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image:
-                              NetworkImage("https://via.placeholder.com/21x20"),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
+                ),
+             
+              );
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
+      bottomNavigationBar: Container(
+        height: 80,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  'จาก นายอัครชัย วารีรัตน์',
+                  style: TextStyle(
+                    color: Color(0xFF808080),
+                    fontSize: 14,
+                    fontFamily: 'Josefin Sans',
+                    height: 0,
                   ),
-                  Positioned(
-                    left: 87,
-                    top: 407,
-                    child: Text(
-                      '#21ชนผนัง 450 ซม. จำนวน 2 ท่อน',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Josefin Sans',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                InkWell(
+                  child: IconButton(
+              icon: Image.network(
+                'https://cdn-icons-png.flaticon.com/128/1092/1092004.png',
+                width: 27,
+                height: 27,
+                color: Color.fromARGB(255, 135, 135, 135),
               ),
-            )
-            // Text('Order ID: ${orderId ?? "N/A"}'),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     // Navigate back to the previous page
-            //     Navigator.pop(context);
-            //   },
-            //   child: Text('Go Back'),
-            // ),
+              onPressed: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const Orderall()),
+                // );
+              },
+            ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

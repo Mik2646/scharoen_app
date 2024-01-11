@@ -119,21 +119,21 @@ class _addOrderState extends State<addOrder> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  IconButton(
-                    icon: Image.network(
-                      'https://cdn-icons-png.flaticon.com/128/10608/10608892.png',
-                      width: 37,
-                      height: 37,
-                      color: Color.fromARGB(255, 135, 135, 135),
-                    ),
-                    onPressed: () {
-                      print(amount);
-                      setState(() {
-                        amount++;
-                        // counter++;
-                      });
-                    },
-                  ),
+                  // IconButton(
+                  //   icon: Image.network(
+                  //     'https://cdn-icons-png.flaticon.com/128/10608/10608892.png',
+                  //     width: 37,
+                  //     height: 37,
+                  //     color: Color.fromARGB(255, 135, 135, 135),
+                  //   ),
+                  //   onPressed: () {
+                  //     print(amount);
+                  //     setState(() {
+                  //       amount++;
+                  //       // counter++;
+                  //     });
+                  //   },
+                  // ),
                   IconButton(
                     icon: Image.network(
                       'https://cdn-icons-png.flaticon.com/128/7130/7130774.png',
@@ -513,51 +513,51 @@ class _AddorderState extends State<Addroof> {
   }
 }
 
-void _showaddorderDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        // title: Text('Forgot Password?'),
-        // content: Text('โปรดติดต่อผู้ดูเเลระบบเพื่อเเก้ไขรหัสผ่านนะครับ .'),
+// void _showaddorderDialog(BuildContext context) {
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return AlertDialog(
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(15.0),
+//         ),
+//         // title: Text('Forgot Password?'),
+//         // content: Text('โปรดติดต่อผู้ดูเเลระบบเพื่อเเก้ไขรหัสผ่านนะครับ .'),
 
-        actions: <Widget>[
-          Column(
-            children: [
-              // IconButton(
-              //     icon: Icon(Icons.menu),
-              //     onPressed: () {
-              //       Navigator.pop(context);
-              //     },
-              //   ),
-              SizedBox(
-                height: 80,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "images/forgotpassword.png",
-                    color: Colors.grey,
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 80,
-              ),
-              Text('โปรดติดต่อผู้ดูเเลระบบเพื่อเเก้ไขรหัสผ่าน .'),
-            ],
-          ),
-        ],
-      );
-    },
-  );
-}
+//         actions: <Widget>[
+//           Column(
+//             children: [
+//               // IconButton(
+//               //     icon: Icon(Icons.menu),
+//               //     onPressed: () {
+//               //       Navigator.pop(context);
+//               //     },
+//               //   ),
+//               SizedBox(
+//                 height: 80,
+//               ),
+//               Row(
+//                 crossAxisAlignment: CrossAxisAlignment.center,
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: [
+//                   Image.asset(
+//                     "images/forgotpassword.png",
+//                     color: Colors.grey,
+//                   ),
+//                 ],
+//               ),
+//               SizedBox(
+//                 height: 80,
+//               ),
+//               Text('โปรดติดต่อผู้ดูเเลระบบเพื่อเเก้ไขรหัสผ่าน .'),
+//             ],
+//           ),
+//         ],
+//       );
+//     },
+//   );
 // }
+// // }
 // class AddCover extends StatefulWidget {
 //   int indexcover;
 //   AddCover({super.key, required this.indexcover});
