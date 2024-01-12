@@ -2,18 +2,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:page_transition/page_transition.dart';
 import 'dart:io';
-import 'package:scharoen_app/models/Employee.dart';
-import 'package:scharoen_app/screens/Orderall.dart';
 import 'package:scharoen_app/screens/auth.dart';
 import 'package:scharoen_app/widget/ordermanufacture.dart';
 
 class UploadImageScreen extends StatefulWidget {
-  UploadImageScreen({super.key, this.orderId, this.roofColor});
+  UploadImageScreen(
+      {super.key,
+      this.orderId,
+      this.colorRoof,
+      this.create_by,
+      this.date,
+      this.statusUser,
+      this.statusorder});
   String? orderId;
-  String? roofColor;
+  String? colorRoof;
+  String? create_by;
+  String? date;
+  bool? statusUser;
+  String? statusorder;
   @override
   _UploadImageScreenState createState() => _UploadImageScreenState();
 }
@@ -38,8 +47,9 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
     await orderItem?.where("id", isEqualTo: widget.orderId).get().then((value) {
       for (var element in value.docs) {
         if (element.exists) {
-          orderItem?.doc(element.id).update({"image": imageurl});
-          print(element['id']);
+          orderItem
+              ?.doc(element.id)
+              .update({"image": imageurl, "orderitem_status": "completed"});
         } else {
           return;
         }
@@ -63,8 +73,8 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return ListView(
+      // crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Column(children: [
           Column(
@@ -120,7 +130,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                       left: 30,
                       top: 79,
                       child: Text(
-                        '⎯ สี ${widget.roofColor}',
+                        'วันที่ ${widget.date}',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 16,
@@ -132,15 +142,29 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                     ),
                     Positioned(
                       left: 352,
-                      top: 40,
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        decoration: ShapeDecoration(
-                          color: Color(0xFFFDA726),
-                          shape: OvalBorder(),
-                        ),
-                      ),
+                      top: 10,
+                      child:     Text(
+                            widget.statusorder.toString() == 'pending'
+                                ? '•'
+                                : widget.statusorder.toString() == 'inprogress'
+                                    ? '•'
+                                    : widget.statusorder.toString() ==
+                                            'Successfullycompleted'
+                                        ? '•'
+                                        : '•',
+                            style: TextStyle(
+                              color:widget.statusorder.toString() == 'pending'
+                                  ? Color.fromARGB(227, 232, 192, 47)
+                                  : widget.statusorder.toString() == 'inprogress'
+                                      ? Colors.orange
+                                      : widget.statusorder.toString() ==
+                                              'completed'
+                                          ? const Color.fromARGB(
+                                              255, 95, 218, 99)
+                                          : Colors.black,
+                              fontSize: 40.0,
+                            ),
+                          ),
                     ),
                   ],
                 ),
@@ -209,13 +233,13 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
           ),
         ),
         SizedBox(
-          height: 130,
+          height: 70,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Checkbox(
-              activeColor: Color.fromARGB(135, 118, 201, 46),
+              activeColor: Color.fromARGB(255, 17, 175, 14),
               value: isChecked,
               onChanged: (value) {
                 setState(() {
@@ -234,7 +258,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              'จาก นายอัครชัย วารีรัตน์',
+              'จาก ${widget.create_by}',
               style: TextStyle(
                 color: Color(0xFF808080),
                 fontSize: 14,
@@ -268,9 +292,9 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                               Navigator.of(context).pop(); // Close the dialog
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('เพิ่มออเดอร์สำเร็จ'),
+                                  content: Text('สำเร็จ!'),
                                   backgroundColor:
-                                      Color.fromARGB(255, 104, 255, 53),
+                                      Colors.grey,
                                 ),
                               );
                               Navigator.push(

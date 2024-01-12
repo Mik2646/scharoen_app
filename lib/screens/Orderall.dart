@@ -14,9 +14,14 @@ class _OrderallState extends State<Orderall> {
   Widget build(BuildContext context) {
        return Scaffold(
       appBar: AppBar(
-        
+         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        elevation:
+            2.5, // ตั้งค่า elevation เป็น 0.0 เพื่อป้องกันการปรากฎเงาด้านบน
+        shadowColor:
+            const Color.fromARGB(255, 0, 0, 0), // สีของเงาที่คุณต้องการ
+        toolbarHeight: 70.0, // ตั้งค่าความสูงของ AppBar ตามที่ต้องการ
         title: Text('ออเดอร์ทั้งหมด'),
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+     
          actions: [
           // Padding(
           //   padding: const EdgeInsets.only(right: 5),
