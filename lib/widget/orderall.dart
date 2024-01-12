@@ -141,11 +141,11 @@ class orderall extends StatelessWidget {
              child: Text(
   snapshot.data![index].orderitem_status.toString() == 'pending' ? '•' :
   snapshot.data![index].orderitem_status.toString() == 'inprogress' ? '•' :
-  snapshot.data![index].orderitem_status.toString() == 'Successfullycompleted' ? '•' : '•',
+  snapshot.data![index].orderitem_status.toString() == 'completed' ? '•' : '•',
   style: TextStyle(
     color: snapshot.data![index].orderitem_status.toString() == 'pending' ? Color.fromARGB(227, 232, 192, 47) :
     snapshot.data![index].orderitem_status.toString() == 'inprogress' ? Colors.orange :
-    snapshot.data![index].orderitem_status.toString() == 'Successfullycompleted' ? const Color.fromARGB(255, 95, 218, 99) :
+    snapshot.data![index].orderitem_status.toString() == 'completed' ? const Color.fromARGB(255, 95, 218, 99) :
     Colors.black, 
     fontSize: 40.0,
   ),
@@ -210,7 +210,10 @@ class orderall extends StatelessWidget {
                                     MaterialPageRoute(
                                       builder: (context,) => NextOrderall(
                                         orderId: snapshot.data![index].id,
-                                        date: snapshot.data![index].dates
+                                        date: snapshot.data![index].dates,
+                                        statusorder:snapshot.data![index].orderitem_status,
+                                        create_by:snapshot.data![index].create_by,
+                                        img:snapshot.data![index].image,
                                       ),
                                     ),
                                   );
@@ -241,8 +244,10 @@ class NextOrderall extends StatelessWidget {
   final bool? statusUser;
   final String? statusorder;
   final  String? date;
+  final String? create_by;
+  final String? img;
 
-  NextOrderall({Key? key, this.orderId, this.lengthCover, this.colorRoof, this.statusUser, this.statusorder, this.date})
+  NextOrderall({Key? key, this.orderId, this.lengthCover, this.colorRoof, this.statusUser, this.statusorder, this.date, this.create_by, this.img})
       : super(key: key);
 CollectionReference orders = FirebaseFirestore.instance.collection("order");
     final _auth = FirebaseAuth.instance;
@@ -250,12 +255,17 @@ CollectionReference orders = FirebaseFirestore.instance.collection("order");
   Widget build(BuildContext context) {
      return Scaffold(
            appBar: AppBar(
-       
-        title: Text("ออเดอร์ "+orderId!),
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        elevation:
+            2.5, // ตั้งค่า elevation เป็น 0.0 เพื่อป้องกันการปรากฎเงาด้านบน
+        shadowColor:
+            const Color.fromARGB(255, 0, 0, 0), // สีของเงาที่คุณต้องการ
+        toolbarHeight: 70.0, // ตั้งค่าความสูงของ AppBar ตามที่ต้องการ
+        title: Text("ออเดอร์ ",style: TextStyle(fontSize: 25),),
+     
          actions: [Padding(
-           padding: const EdgeInsets.only(right: 10),
-           child: Text(" ${date}"),
+           padding: const EdgeInsets.only(right: 15),
+           child: Text(" ${date}",style: TextStyle(color: Colors.grey,fontSize: 12),),
          )
         ],
       ),
@@ -280,20 +290,20 @@ CollectionReference orders = FirebaseFirestore.instance.collection("order");
             if (snapshot.hasData) {
               return SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.only(right:28,left: 28),
+                  padding: const EdgeInsets.only(right:28,left: 28,top: 10),
                   child: Column(
                     children: [
                  
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("หมายเลขออเดอร์ : ${orderId}",style: TextStyle(fontSize: 18),),
+                          Text("หมายเลขออเดอร์ : ${orderId}",style: TextStyle(fontSize: 19),),
                           Text(
                             statusorder.toString() == 'pending'
                                 ? '•'
                                 : statusorder.toString() == 'inprogress'
                                     ? '•'
-                                    : statusorder.toString() == 'Successfullycompleted'
+                                    : statusorder.toString() == 'completed'
                                         ? '•'
                                         : '•',
                             style: TextStyle(
@@ -301,7 +311,7 @@ CollectionReference orders = FirebaseFirestore.instance.collection("order");
                                   ? Color.fromARGB(227, 232, 192, 47)
                                   : statusorder.toString() == 'inprogress'
                                       ? Colors.orange
-                                      : statusorder.toString() == 'Successfullycompleted'
+                                      : statusorder.toString() == 'completed'
                                           ? const Color.fromARGB(255, 95, 218, 99)
                                           : Colors.black,
                               fontSize: 40.0,
@@ -332,8 +342,68 @@ CollectionReference orders = FirebaseFirestore.instance.collection("order");
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                        Text("รายการผลิต",style: TextStyle(fontSize: 16),)
-                      ],)
+                        Text("รายการผลิต",style: TextStyle(fontSize: 17),)
+                      ],),SizedBox(height: 10,),
+                             Container(
+                        height: 200,
+                        child: ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              return Row(
+                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      " ${index + 1}.   ${snapshot.data!.docs[index]['typeroof']} ${snapshot.data!.docs[index]['length_roof']} ซม. จำนวน  ${snapshot.data!.docs[index]['amount_roof']}  เเผ่น",style: TextStyle(fontSize: 15),),
+                                       MyCheckboxWidget(),
+                                ],
+                              );
+                            }),
+                      ),
+
+                      Row(
+                        children: [
+                          Text("เพิ่มเติม", style: TextStyle(fontSize: 16),),
+                        ],
+                      ),SizedBox(height: 20,),
+                         Container(
+                        height: 100,
+                        child: ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      "${snapshot.data!.docs[index]['note']} "),
+                 
+                                ],
+                              );
+                            }),
+                      ),
+                      TextButton(onPressed: (){
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('หลักฐานอ้างอิง'),
+        content: Container(
+          child:  Image.network(
+            ("${img}"), 
+            fit: BoxFit.cover,
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('ปิด'),
+          ),
+        ],
+      );
+    },
+  );
+                      }, child: Text("ดูหลักฐานการผลิต"))
                     ],
                   ),
                 ),
@@ -352,7 +422,7 @@ CollectionReference orders = FirebaseFirestore.instance.collection("order");
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  'จาก นายอัครชัย วารีรัตน์',
+                  'จาก ${create_by}',
                   style: TextStyle(
                     color: Color(0xFF808080),
                     fontSize: 14,
@@ -386,4 +456,28 @@ CollectionReference orders = FirebaseFirestore.instance.collection("order");
       ),
     );
   }
+}
+class MyCheckboxWidget extends StatefulWidget {
+  @override
+  _MyCheckboxWidgetState createState() => _MyCheckboxWidgetState();
+}
+
+class _MyCheckboxWidgetState extends State<MyCheckboxWidget> {
+  bool isChecked = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+      activeColor: Color.fromARGB(255, 17, 175, 14),
+      value: isChecked,
+      onChanged: (value) {
+        setState(() {
+          isChecked = value!;
+        });
+      },
+    );
+  }}
+
+  void showImageDialog(BuildContext context) {
+
 }

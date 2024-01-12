@@ -10,10 +10,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:scharoen_app/widget/UploadImage.dart';
 
 class ordermanufacture extends StatelessWidget {
-  bool? statusUser ; 
-  String?  username;
-   ordermanufacture({Key? key,this.statusUser,this.username, }) : super(key: key);
+  bool? statusUser;
+  String? username;
 
+  ordermanufacture({
+    Key? key,
+    this.statusUser,
+    this.username,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -152,11 +156,15 @@ class ordermanufacture extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => NextPage(
-                                         username: username,
+                                        username: username,
                                         statusUser: statusUser,
                                         orderId: snapshot.data![index].id,
                                         statusorder: snapshot
                                             .data![index].orderitem_status,
+                                        create_by: snapshot
+                                            .data![index].create_by,
+                                        date:snapshot.data![index].dates, 
+
                                         // lengthCover:
                                         //     snapshot.data![index].length_cover,
                                         // colorRoof:
@@ -176,7 +184,10 @@ class ordermanufacture extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text("${snapshot.error}"));
           }
-          return Center(child: CircularProgressIndicator());
+          else{
+            return Text("ไม่มีออเดอร์",style: TextStyle(color: Colors.black),);
+          }
+        
         },
       ),
     );
@@ -185,11 +196,14 @@ class ordermanufacture extends StatelessWidget {
 
 class NextPage extends StatelessWidget {
   final String? orderId;
+  bool isChecked = false;
   final String? lengthCover;
   final String? colorRoof;
   final bool? statusUser;
   final String? username;
   final String? statusorder;
+  final String? create_by;
+  final String? date;
   CollectionReference orders = FirebaseFirestore.instance.collection("order");
   NextPage(
       {Key? key,
@@ -197,11 +211,12 @@ class NextPage extends StatelessWidget {
       this.orderId,
       this.lengthCover,
       this.colorRoof,
-      this.statusorder,  this.username})
+      this.statusorder,
+      this.username,this.create_by, this.date})
       : super(key: key);
 
   final _auth = FirebaseAuth.instance;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -310,7 +325,7 @@ class NextPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                       ("${username}"),
+                        ("${username}"),
                         style: TextStyle(fontSize: 15),
                       ),
                       Text(
@@ -409,7 +424,7 @@ class NextPage extends StatelessWidget {
             if (snapshot.hasData) {
               return SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(28.0),
+                  padding: const EdgeInsets.only(left:28.0 ,right: 28,top: 10),
                   child: Column(
                     children: [
                       Row(
@@ -434,7 +449,7 @@ class NextPage extends StatelessWidget {
                                   : statusorder.toString() == 'inprogress'
                                       ? Colors.orange
                                       : statusorder.toString() ==
-                                              'Successfullycompleted'
+                                              'completed'
                                           ? const Color.fromARGB(
                                               255, 95, 218, 99)
                                           : Colors.black,
@@ -469,23 +484,50 @@ class NextPage extends StatelessWidget {
                         children: [
                           Text(
                             "รายการผลิต",
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 17),
                           )
                         ],
                       ),
+                      SizedBox(height: 10,),
                       Container(
-                        height: 300,
+                        height: 200,
                         child: ListView.builder(
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
-                              return Text(
-                                  "${index + 1}. ${snapshot.data!.docs[index]['typeroof']}");
+                              return Row(
+                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      "${index + 1}.    ${snapshot.data!.docs[index]['typeroof']} ${snapshot.data!.docs[index]['length_roof']} ซม. จำนวน  ${snapshot.data!.docs[index]['amount_roof']}  เเผ่น",style: TextStyle(fontSize: 15),),
+                               MyCheckboxWidget(),
+                                ],
+                              );
                             }),
-                      )
+                      ),
+                      Row(
+                        children: [
+                          Text("เพิ่มเติม", style: TextStyle(fontSize: 16),),
+                        ],
+                      ),SizedBox(height: 10,),
+                         Container(
+                        height: 200,
+                        child: ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      "${snapshot.data!.docs[index]['note']} "),
+                       
+                                ],
+                              );
+                            }),
+                      ),
+                    
                     ],
                   ),
                 ),
-               
               );
             }
             return Center(
@@ -500,7 +542,7 @@ class NextPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  'จาก นายอัครชัย วารีรัตน์',
+                  'จาก ${create_by}',
                   style: TextStyle(
                     color: Color(0xFF808080),
                     fontSize: 14,
@@ -519,10 +561,13 @@ class NextPage extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => NextPage2(
                                   orderId: orderId,
-                                  colorRoof: "สีแดง",
+                                  username: username,
+                                  statusUser: statusUser,
+                                  colorRoof: colorRoof,
+                                  date:date,
+                                  create_by: create_by,
+                                  statusorder:statusorder,
                                 )),
-
-
                       );
                     },
                     style: ButtonStyle(
@@ -546,14 +591,18 @@ class NextPage extends StatelessWidget {
 
 class NextPage2 extends StatelessWidget {
   final String? orderId;
-
+  final bool? statusUser;
+  final String? username;
   final String? colorRoof;
-
+  final String? create_by;
+  final String? date;
+  final String? statusorder;
   NextPage2({
     Key? key,
     this.colorRoof,
     this.orderId,
-
+    this.statusUser,
+    this.username, this.create_by, this.date, this.statusorder,
   }) : super(key: key);
   final _auth = FirebaseAuth.instance;
   @override
@@ -593,26 +642,26 @@ class NextPage2 extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                ("${username!}"),
+                  ("${username!}"),
                   style: TextStyle(
                     fontSize: 14,
                   ),
                 ), // ชื่อ
-
               ],
-              
             ),
-                Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Text(
-                        statusUser! ? '•' : '•',
-                        style: TextStyle(
-                          color: statusUser! ? Color(0xFF23E41F) : const Color.fromARGB(255, 103, 103, 103),
-                          fontSize: 38.0,
-                        ),
-                                    ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(
+                statusUser! ? '•' : '•',
+                style: TextStyle(
+                  color: statusUser!
+                      ? Color(0xFF23E41F)
+                      : const Color.fromARGB(255, 103, 103, 103),
+                  fontSize: 38.0,
+                ),
               ),
-            
+            ),
+
             // Padding(
             //   padding: const EdgeInsets.only(bottom: 5),
             //   child: Text(
@@ -674,16 +723,18 @@ class NextPage2 extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                       ("${username}"),
+                        ("${username}"),
                         style: TextStyle(fontSize: 15),
                       ),
-                             Text(
-                      statusUser!? '•' : '•',
-                      style: TextStyle(
-                        color:  statusUser! ? Color(0xFF23E41F) : const Color.fromARGB(255, 103, 103, 103),
-                        fontSize: 24.0,
+                      Text(
+                        statusUser! ? '•' : '•',
+                        style: TextStyle(
+                          color: statusUser!
+                              ? Color(0xFF23E41F)
+                              : const Color.fromARGB(255, 103, 103, 103),
+                          fontSize: 24.0,
+                        ),
                       ),
-                                  ),
                     ],
                   ),
                 ],
@@ -738,92 +789,33 @@ class NextPage2 extends StatelessWidget {
           ],
         ),
       ),
-      body: UploadImageScreen(orderId: orderId, roofColor: colorRoof),
-      // bottomNavigationBar: Container(
-      //   height: 80,
-      //   child: Column(
-      //     children: [
-      //       Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //         children: [
-      //           Text(
-      //             'จาก นายอัครชัย วารีรัตน์',
-      //             style: TextStyle(
-      //               color: Color(0xFF808080),
-      //               fontSize: 14,
-      //               fontFamily: 'Josefin Sans',
-      //               height: 0,
-      //             ),
-      //           ),
-      //           SizedBox(
-      //             width: 10,
-      //           ),
-      //           InkWell(
-      //             child: ElevatedButton(
-      //               onPressed: () async {
-      //                 showDialog(
-      //                   context: context,
-      //                   builder: (BuildContext context) {
-      //                     return AlertDialog(
-      //                       title: Text('ยืนยันการตรวจสอบ'),
-      //                       content: Text('คุณต้องการยืนยันการตรวจสอบหรือไม่?'),
-      //                       actions: [
-      //                         TextButton(
-      //                           onPressed: () {
-      //                             Navigator.of(context)
-      //                                 .pop(); // Close the dialog
-      //                           },
-      //                           child: Text('ยกเลิก'),
-      //                         ),
-      //                         TextButton(
-      //                           onPressed: () async {
-      //                             // for (var i = 0; i < addorders.length; i++) {
-      //                             //   await addorderFirebase(
-      //                             //       addorders[i], widget.orderIds);
-      //                             // }
-      //                             Navigator.of(context)
-      //                                 .pop(); // Close the dialog
-      //                             ScaffoldMessenger.of(context).showSnackBar(
-      //                               SnackBar(
-      //                                 content: Text('เพิ่มออเดอร์สำเร็จ'),
-      //                                 backgroundColor:
-      //                                     Color.fromARGB(255, 104, 255, 53),
-      //                               ),
-      //                             );
-      //                             Navigator.push(
-      //                               context,
-      //                               MaterialPageRoute(
-      //                                   builder: (context) =>
-      //                                       Authenticationsceen()),
-      //                             );
-      //                           },
-      //                           child: Text(
-      //                             'ยืนยัน',
-      //                             style: TextStyle(color: Colors.green),
-      //                           ),
-      //                         ),
-      //                       ],
-      //                     );
-      //                   },
-      //                 );
-      //               },
-      //               style: ButtonStyle(
-      //                 elevation: MaterialStateProperty.all(
-      //                     1), // ตั้งค่า elevation เป็น 0 (ไม่มีเงา)
-      //               ),
-      //               child: Text(
-      //                 'Finish',
-      //                 style: TextStyle(color: Colors.green),
-      //               ),
-      //             ),
-      //           ),
-      //         ],
-      //       ),
+      body: UploadImageScreen(orderId: orderId, colorRoof: colorRoof ,create_by:create_by,date:date ,statusorder:statusorder),
 
-      //       // ),
-      //     ],
-      //   ),
       // ),
+    );
+  }
+}
+
+
+
+class MyCheckboxWidget extends StatefulWidget {
+  @override
+  _MyCheckboxWidgetState createState() => _MyCheckboxWidgetState();
+}
+
+class _MyCheckboxWidgetState extends State<MyCheckboxWidget> {
+  bool isChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+      activeColor: Color.fromARGB(255, 17, 175, 14),
+      value: isChecked,
+      onChanged: (value) {
+        setState(() {
+          isChecked = value!;
+        });
+      },
     );
   }
 }

@@ -16,6 +16,7 @@ class _addOrderState extends State<addOrder> {
   String? counts = "000";
   int amountcover = 1;
 
+
   Future<void> addOrderId() async {
     await FirebaseFirestore.instance
         .collection("oder_item")
@@ -102,6 +103,7 @@ class _addOrderState extends State<addOrder> {
               onPressed: () {
                 setState(() {
                   amount++;
+                  
                   // counter++;
                 });
               },
@@ -235,7 +237,7 @@ class _addOrderState extends State<addOrder> {
 }
 
 class Addroof extends StatefulWidget {
-  int index;
+ int index;
   Addroof({super.key, required this.index});
   TextEditingController? _typeroofController = TextEditingController();
   TextEditingController? _colorroofController = TextEditingController();
