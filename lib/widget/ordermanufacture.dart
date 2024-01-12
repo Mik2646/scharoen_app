@@ -12,7 +12,6 @@ import 'package:scharoen_app/widget/UploadImage.dart';
 class ordermanufacture extends StatelessWidget {
   bool? statusUser;
   String? username;
-
   ordermanufacture({
     Key? key,
     this.statusUser,
@@ -28,6 +27,14 @@ class ordermanufacture extends StatelessWidget {
       child: StreamBuilder<List<Orderitem>>(
         stream: stream,
         builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text("${snapshot.error}"));
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(
+              child: Text("ไม่มีออเดอร์"),
+            );
+          }
           if (snapshot.hasData) {
             return ListView.builder(
                 itemCount: snapshot.data?.length,
@@ -212,12 +219,9 @@ class ordermanufacture extends StatelessWidget {
                     ),
                   );
                 });
-          } else if (snapshot.hasError) {
-            return Center(child: Text("${snapshot.error}"));
           } else {
-            return Text(
-              "ไม่มีออเดอร์",
-              style: TextStyle(color: Colors.black),
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           }
         },
