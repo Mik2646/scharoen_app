@@ -44,6 +44,8 @@ class _ProfileState extends State<Profile> {
           empoly?.lastname = element['lastname'];
           empoly?.role = element['role'];
           empoly?.firstname = element['name'];
+          empoly?.phone = element['phone'];
+          empoly?.address = element['address'];
         });
       }
     });
@@ -112,8 +114,8 @@ class _ProfileState extends State<Profile> {
             SizedBox(height: 24),
             _buildInfoCard('รหัสพนักงาน', "${empoly?.id}"),
             _buildInfoCard('อีเมล์', "${empoly?.email}"),
-            _buildInfoCard('ชื่อ', "${empoly?.firstname}"),
-            _buildInfoCard('นามสกุล', "${empoly?.lastname}"),
+            _buildInfoCard('เบอร์โทร', "${empoly?.phone}"),
+            _buildInfoCard('ที่อยู่', "${empoly?.address}"),
             SizedBox(height: 24),
             SizedBox(
               height: 100,
