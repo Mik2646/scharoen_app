@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scharoen_app/models/Employee.dart';
+import 'package:scharoen_app/screens/EditEmployee.dart';
 import 'package:scharoen_app/service/database.dart';
 
 class CardTeam extends StatelessWidget {
@@ -212,6 +213,7 @@ class Teamdetail extends StatelessWidget {
   final String? Phone;
   final String? Address;
   final String? Role;
+
   final bool? Status;
   Teamdetail(
       {super.key,
@@ -310,10 +312,20 @@ class Teamdetail extends StatelessWidget {
           ? FloatingActionButton(
               backgroundColor: const Color.fromARGB(255, 255, 255, 255),
               onPressed: () {
-                // Navigator.push(
-                //         context,
-                //         MaterialPageRoute(builder: (context) => AddUserScreen()),
-                //       );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditUserScreen(
+                            emId: emId,
+                            address: Address,
+                            email: Email,
+                            status: Status,
+                            lastname: Lastname,
+                            phone: Phone,
+                            role: Role,
+                            name: Firstname,
+                          )),
+                );
               },
               child: Icon(
                 Icons.edit,
