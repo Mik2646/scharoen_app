@@ -161,9 +161,9 @@ class ordermanufacture extends StatelessWidget {
                                         orderId: snapshot.data![index].id,
                                         statusorder: snapshot
                                             .data![index].orderitem_status,
-                                        create_by: snapshot
-                                            .data![index].create_by,
-                                        date:snapshot.data![index].dates, 
+                                        create_by:
+                                            snapshot.data![index].create_by,
+                                        date: snapshot.data![index].dates,
 
                                         // lengthCover:
                                         //     snapshot.data![index].length_cover,
@@ -174,6 +174,37 @@ class ordermanufacture extends StatelessWidget {
                                   );
                                 },
                               ),
+                              IconButton(
+                                  onPressed: () async {
+                                    CollectionReference? orderItem =
+                                        FirebaseFirestore.instance
+                                            .collection("oder_item");
+                                    CollectionReference? orders =
+                                        FirebaseFirestore.instance
+                                            .collection("order");
+                                    await orderItem
+                                        .where("id",
+                                            isEqualTo: snapshot.data![index].id)
+                                        .get()
+                                        .then((value) {
+                                      for (var element in value.docs) {
+                                        orderItem.doc(element.id).delete();
+                                      }
+                                    });
+                                    await orders
+                                        .where("order_itemId",
+                                            isEqualTo: snapshot.data![index].id)
+                                        .get()
+                                        .then((value) {
+                                      for (var element in value.docs) {
+                                        orders.doc(element.id).delete();
+                                      }
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  )),
                             ],
                           ),
                         )
@@ -183,11 +214,12 @@ class ordermanufacture extends StatelessWidget {
                 });
           } else if (snapshot.hasError) {
             return Center(child: Text("${snapshot.error}"));
+          } else {
+            return Text(
+              "ไม่มีออเดอร์",
+              style: TextStyle(color: Colors.black),
+            );
           }
-          else{
-            return Text("ไม่มีออเดอร์",style: TextStyle(color: Colors.black),);
-          }
-        
         },
       ),
     );
@@ -212,7 +244,9 @@ class NextPage extends StatelessWidget {
       this.lengthCover,
       this.colorRoof,
       this.statusorder,
-      this.username,this.create_by, this.date})
+      this.username,
+      this.create_by,
+      this.date})
       : super(key: key);
 
   final _auth = FirebaseAuth.instance;
@@ -424,7 +458,8 @@ class NextPage extends StatelessWidget {
             if (snapshot.hasData) {
               return SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.only(left:28.0 ,right: 28,top: 10),
+                  padding:
+                      const EdgeInsets.only(left: 28.0, right: 28, top: 10),
                   child: Column(
                     children: [
                       Row(
@@ -448,8 +483,7 @@ class NextPage extends StatelessWidget {
                                   ? Color.fromARGB(227, 232, 192, 47)
                                   : statusorder.toString() == 'inprogress'
                                       ? Colors.orange
-                                      : statusorder.toString() ==
-                                              'completed'
+                                      : statusorder.toString() == 'completed'
                                           ? const Color.fromARGB(
                                               255, 95, 218, 99)
                                           : Colors.black,
@@ -488,43 +522,53 @@ class NextPage extends StatelessWidget {
                           )
                         ],
                       ),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Container(
                         height: 200,
                         child: ListView.builder(
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               return Row(
-                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                      "${index + 1}.    ${snapshot.data!.docs[index]['typeroof']} ${snapshot.data!.docs[index]['length_roof']} ซม. จำนวน  ${snapshot.data!.docs[index]['amount_roof']}  เเผ่น",style: TextStyle(fontSize: 15),),
-                               MyCheckboxWidget(),
+                                    "${index + 1}.    ${snapshot.data!.docs[index]['typeroof']} ${snapshot.data!.docs[index]['length_roof']} ซม. จำนวน  ${snapshot.data!.docs[index]['amount_roof']}  เเผ่น",
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                  MyCheckboxWidget(),
                                 ],
                               );
                             }),
                       ),
                       Row(
                         children: [
-                          Text("เพิ่มเติม", style: TextStyle(fontSize: 16),),
+                          Text(
+                            "เพิ่มเติม",
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ],
-                      ),SizedBox(height: 10,),
-                         Container(
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
                         height: 200,
                         child: ListView.builder(
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               return Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                       "${snapshot.data!.docs[index]['note']} "),
-                       
                                 ],
                               );
                             }),
                       ),
-                    
                     ],
                   ),
                 ),
@@ -564,9 +608,9 @@ class NextPage extends StatelessWidget {
                                   username: username,
                                   statusUser: statusUser,
                                   colorRoof: colorRoof,
-                                  date:date,
+                                  date: date,
                                   create_by: create_by,
-                                  statusorder:statusorder,
+                                  statusorder: statusorder,
                                 )),
                       );
                     },
@@ -602,7 +646,10 @@ class NextPage2 extends StatelessWidget {
     this.colorRoof,
     this.orderId,
     this.statusUser,
-    this.username, this.create_by, this.date, this.statusorder,
+    this.username,
+    this.create_by,
+    this.date,
+    this.statusorder,
   }) : super(key: key);
   final _auth = FirebaseAuth.instance;
   @override
@@ -789,14 +836,17 @@ class NextPage2 extends StatelessWidget {
           ],
         ),
       ),
-      body: UploadImageScreen(orderId: orderId, colorRoof: colorRoof ,create_by:create_by,date:date ,statusorder:statusorder),
+      body: UploadImageScreen(
+          orderId: orderId,
+          colorRoof: colorRoof,
+          create_by: create_by,
+          date: date,
+          statusorder: statusorder),
 
       // ),
     );
   }
 }
-
-
 
 class MyCheckboxWidget extends StatefulWidget {
   @override

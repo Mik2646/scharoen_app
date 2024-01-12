@@ -1,21 +1,59 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:scharoen_app/screens/Homepage.dart';
+import 'package:scharoen_app/screens/Teampage.dart';
+import 'package:scharoen_app/service/Authentication.dart';
+import 'package:scharoen_app/widget/cardteam.dart';
 
-class AddUserScreen extends StatefulWidget {
+class EditUserScreen extends StatefulWidget {
+  EditUserScreen(
+      {super.key,
+      required this.name,
+      required this.address,
+      required this.email,
+      required this.lastname,
+      required this.emId,
+      required this.status,
+      required this.phone,
+      required this.role});
+  String? name;
+  String? emId;
+  String? lastname;
+  String? email;
+  String? phone;
+  String? address;
+  String? role;
+  bool? status;
+
   @override
-  _AddUserScreenState createState() => _AddUserScreenState();
+  _EditUserScreenState createState() => _EditUserScreenState();
 }
 
-class _AddUserScreenState extends State<AddUserScreen> {
+class _EditUserScreenState extends State<EditUserScreen> {
   TextEditingController? _nameController = TextEditingController();
   TextEditingController? _lastnameController = TextEditingController();
   TextEditingController? _emailController = TextEditingController();
   TextEditingController? _phoneController = TextEditingController();
   TextEditingController? _addressController = TextEditingController();
-  TextEditingController? _passwordController = TextEditingController();
+
   TextEditingController? _roleController = TextEditingController();
-  bool _status = false;
+  late AuthenticationService auth;
+
+  bool? _status;
   String selectedRole = ''; // Variable to store the selected role
+  void initState() {
+    super.initState();
+    setState(() {
+      _status = widget.status;
+      _nameController!.text = widget.name!;
+      _addressController!.text = widget.address!;
+      _emailController!.text = widget.email!;
+      _lastnameController!.text = widget.lastname!;
+      _phoneController!.text = widget.phone!;
+      _roleController!.text = widget.role!;
+    });
+  }
 
   List<String> roles = [
     'ผู้บริหาร',
@@ -29,7 +67,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
     _emailController?.clear();
     _phoneController?.clear();
     _addressController?.clear();
-    _passwordController?.clear();
+
     _roleController?.clear();
     _status = false;
   }
@@ -37,7 +75,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('เพิ่มพนักงาน'),
+        title: Text('แก้ไขข้อมูลพนักงาน'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(36.0),
@@ -65,11 +103,6 @@ class _AddUserScreenState extends State<AddUserScreen> {
                 controller: _emailController,
                 decoration: InputDecoration(labelText: 'อีเมลล์'),
                 keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next),
-            TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(labelText: 'รหัสผ่าน'),
-                keyboardType: TextInputType.visiblePassword,
                 textInputAction: TextInputAction.next),
             TextField(
               controller: _phoneController,
@@ -100,20 +133,20 @@ class _AddUserScreenState extends State<AddUserScreen> {
               },
               decoration: InputDecoration(labelText: 'ตำเเหน่ง'),
             ),
-            _buildSwitch('สถานะ', _status),
+            _buildSwitch('สถานะ', _status!),
             SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_validateFields()) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: Colors.black26,
-                      content: Text('เพิ่มสมาชิกสำเร็จ !'),
+                      content: Text('แก้ไขสมาชิกสำเร็จ !'),
                       duration: Duration(seconds: 3),
                     ),
                   );
-                  addUser().then((_) {
-                    _resetValues();
+                  await editUser().then((_) {
+                    Navigator.popUntil(context, (routes) => routes.isFirst);
                   });
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -126,7 +159,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                   );
                 }
               },
-              child: Text('เพิ่มสมาชิก'),
+              child: Text('แก้ไขขข้อมูลสมาชิก'),
             ),
           ],
         ),
@@ -165,36 +198,25 @@ class _AddUserScreenState extends State<AddUserScreen> {
         _emailController?.text.isNotEmpty == true &&
         _phoneController?.text.isNotEmpty == true &&
         _addressController?.text.isNotEmpty == true &&
-        _passwordController?.text.isNotEmpty == true &&
         _roleController?.text.isNotEmpty == true;
   }
 
-  Future<void> addUser() async {
-    final snapshot = await FirebaseFirestore.instance
-        .collection('employee')
-        .orderBy('datetime', descending: true)
-        .get();
-    var Id, count;
-    if (snapshot.docs.isNotEmpty) {
-      count = snapshot.docs.first['count'] + 1;
-      Id = '2024$count';
-    } else {
-      count = 1;
-      Id = "20241";
-    }
-
-    await FirebaseFirestore.instance.collection('employee').doc(Id).set({
-      'count': count,
-      'id': Id,
-      'name': _nameController?.text,
-      'lastname': _lastnameController?.text,
-      'address': _addressController?.text,
-      'email': _emailController?.text,
-      'password': _passwordController?.text,
-      'phone': _phoneController?.text,
-      'role': _roleController?.text,
-      'status': _status,
-      'datetime': DateTime.now(),
+  Future<void> editUser() async {
+    CollectionReference? user =
+        FirebaseFirestore.instance.collection("employee");
+    await user.where("id", isEqualTo: widget.emId).get().then((value) {
+      for (var element in value.docs) {
+        user.doc(element.id).update({
+          'name': _nameController?.text,
+          'lastname': _lastnameController?.text,
+          'address': _addressController?.text,
+          'email': _emailController?.text,
+          'phone': _phoneController?.text,
+          'role': _roleController?.text,
+          'status': _status,
+          'datetime': DateTime.now(),
+        });
+      }
     });
   }
 }
