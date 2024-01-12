@@ -159,7 +159,7 @@ class _HomepageState extends State<Homepage> {
                 isSwitchOn ? '•' : '•',
                 style: TextStyle(
                   color: isSwitchOn
-                      ?Color(0xFF23E41F)
+                      ? Color(0xFF23E41F)
                       : const Color.fromARGB(255, 103, 103, 103),
                   fontSize: 38.0,
                 ),
@@ -297,11 +297,15 @@ class _HomepageState extends State<Homepage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Image.asset("images/logoscaroen.png",color: const Color.fromARGB(255, 227, 227, 227),),
-                    Text("ไม่ได้ทำงาน... ",style: TextStyle(color: Colors.grey),),
+                    Text(
+                      "ไม่ได้ทำงาน... ",
+                      style: TextStyle(color: Colors.grey),
+                    ),
                   ],
                 ),
               )
-            : ordermanufacture(statusUser: isSwitchOn,username:fullname),
+            : ordermanufacture(
+                statusUser: isSwitchOn, username: fullname, role: role),
       ),
       //  Padding(
       //   padding: const EdgeInsets.all(18.0),
@@ -311,27 +315,27 @@ class _HomepageState extends State<Homepage> {
       //         return ordermanufacture();
       //       }),
       // ),
-floatingActionButton: role == "พนักงานขาย" || role == "ผู้บริหาร"
-  ? FloatingActionButton(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) {
-            // addOrderId();
-            return addOrder(
-              fullname: fullname,
-            );
-          }),
-        );
-      },
-      child: Icon(
-        Icons.add,
-        color: Color.fromARGB(255, 136, 135, 135),
-        size: 40,
-      )// ไอคอนบวก
-    )
-  : Text(""),
+      floatingActionButton: role == "พนักงานขาย" || role == "ผู้บริหาร"
+          ? FloatingActionButton(
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    // addOrderId();
+                    return addOrder(
+                      fullname: fullname,
+                    );
+                  }),
+                );
+              },
+              child: Icon(
+                Icons.add,
+                color: Color.fromARGB(255, 136, 135, 135),
+                size: 40,
+              ) // ไอคอนบวก
+              )
+          : Text(""),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
       bottomNavigationBar: BottomMenu(

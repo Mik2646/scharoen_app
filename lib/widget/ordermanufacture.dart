@@ -11,12 +11,10 @@ import 'package:scharoen_app/widget/UploadImage.dart';
 
 class ordermanufacture extends StatelessWidget {
   bool? statusUser;
+  String? role;
   String? username;
-  ordermanufacture({
-    Key? key,
-    this.statusUser,
-    this.username,
-  }) : super(key: key);
+  ordermanufacture({Key? key, this.statusUser, this.username, this.role})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -181,37 +179,41 @@ class ordermanufacture extends StatelessWidget {
                                   );
                                 },
                               ),
-                              IconButton(
-                                  onPressed: () async {
-                                    CollectionReference? orderItem =
-                                        FirebaseFirestore.instance
-                                            .collection("oder_item");
-                                    CollectionReference? orders =
-                                        FirebaseFirestore.instance
-                                            .collection("order");
-                                    await orderItem
-                                        .where("id",
-                                            isEqualTo: snapshot.data![index].id)
-                                        .get()
-                                        .then((value) {
-                                      for (var element in value.docs) {
-                                        orderItem.doc(element.id).delete();
-                                      }
-                                    });
-                                    await orders
-                                        .where("order_itemId",
-                                            isEqualTo: snapshot.data![index].id)
-                                        .get()
-                                        .then((value) {
-                                      for (var element in value.docs) {
-                                        orders.doc(element.id).delete();
-                                      }
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                  )),
+                              role == "ผู้บริหาร"
+                                  ? IconButton(
+                                      onPressed: () async {
+                                        CollectionReference? orderItem =
+                                            FirebaseFirestore.instance
+                                                .collection("oder_item");
+                                        CollectionReference? orders =
+                                            FirebaseFirestore.instance
+                                                .collection("order");
+                                        await orderItem
+                                            .where("id",
+                                                isEqualTo:
+                                                    snapshot.data![index].id)
+                                            .get()
+                                            .then((value) {
+                                          for (var element in value.docs) {
+                                            orderItem.doc(element.id).delete();
+                                          }
+                                        });
+                                        await orders
+                                            .where("order_itemId",
+                                                isEqualTo:
+                                                    snapshot.data![index].id)
+                                            .get()
+                                            .then((value) {
+                                          for (var element in value.docs) {
+                                            orders.doc(element.id).delete();
+                                          }
+                                        });
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ))
+                                  : SizedBox(),
                             ],
                           ),
                         )
