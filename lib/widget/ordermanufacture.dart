@@ -151,6 +151,63 @@ class ordermanufacture extends StatelessWidget {
                                     color: const Color.fromARGB(
                                         255, 151, 151, 151)),
                               ),
+                            role == "พนักงานขาย" || role == "ผู้บริหาร"
+                                  ?IconButton(
+  onPressed: () async {
+    bool confirmDelete = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("ลบออเดอร์? ${snapshot.data?[index].id}"),
+          content: Text("ต้องการลบออเดอร์? ${snapshot.data?[index].id}"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // User pressed No
+              },
+              child: Text("No"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true); // User pressed Yes
+              },
+              child: Text("Yes"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmDelete == true) {
+      CollectionReference? orderItem =
+          FirebaseFirestore.instance.collection("oder_item");
+      CollectionReference? orders =
+          FirebaseFirestore.instance.collection("order");
+      await orderItem
+          .where("id", isEqualTo: snapshot.data![index].id)
+          .get()
+          .then((value) {
+        for (var element in value.docs) {
+          orderItem.doc(element.id).delete();
+        }
+      });
+      await orders
+          .where("order_itemId", isEqualTo: snapshot.data![index].id)
+          .get()
+          .then((value) {
+        for (var element in value.docs) {
+          orders.doc(element.id).delete();
+        }
+      });
+    }
+  },
+  icon: Icon(
+    Icons.delete,
+    color: Colors.red,
+  ),
+)
+
+                                  : SizedBox(),
                               IconButton(
                                 icon: Icon(Icons.navigate_next),
                                 iconSize: 40,
@@ -179,41 +236,6 @@ class ordermanufacture extends StatelessWidget {
                                   );
                                 },
                               ),
-                              role == "ผู้บริหาร"
-                                  ? IconButton(
-                                      onPressed: () async {
-                                        CollectionReference? orderItem =
-                                            FirebaseFirestore.instance
-                                                .collection("oder_item");
-                                        CollectionReference? orders =
-                                            FirebaseFirestore.instance
-                                                .collection("order");
-                                        await orderItem
-                                            .where("id",
-                                                isEqualTo:
-                                                    snapshot.data![index].id)
-                                            .get()
-                                            .then((value) {
-                                          for (var element in value.docs) {
-                                            orderItem.doc(element.id).delete();
-                                          }
-                                        });
-                                        await orders
-                                            .where("order_itemId",
-                                                isEqualTo:
-                                                    snapshot.data![index].id)
-                                            .get()
-                                            .then((value) {
-                                          for (var element in value.docs) {
-                                            orders.doc(element.id).delete();
-                                          }
-                                        });
-                                      },
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
-                                      ))
-                                  : SizedBox(),
                             ],
                           ),
                         )

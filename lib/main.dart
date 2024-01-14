@@ -6,7 +6,8 @@ import 'package:scharoen_app/screens/auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
+  // options: DefaultFirebaseOptions.currentPlatform
   runApp(MyApp());
 }
 

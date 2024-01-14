@@ -279,7 +279,7 @@ class _HomepageState extends State<Homepage> {
             //   },
             // ),
             SizedBox(
-              height: 350,
+              height: 380,
             ),
             Text(
               "By s.charoen",

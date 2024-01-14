@@ -186,7 +186,7 @@ class _addOrderState extends State<addOrder> {
                                       SnackBar(
                                         content: Text('เพิ่มออเดอร์สำเร็จ'),
                                         backgroundColor:
-                                            Color.fromARGB(255, 104, 255, 53),
+                                            Colors.grey,
                                       ),
                                     );
                                     Navigator.push(
@@ -261,8 +261,8 @@ class Addroof extends StatefulWidget {
   }
 
   List<String> typeroof = ['นอก', 'จิงโจ้', 'บลูสโคป'];
-  List<String> colorroof = ['สีซิงค์', 'สีน้ำเงิน', 'สีเเดงมั่งมี'];
-  List<String> sizeroof = ['0.30', '0.20', '0.25'];
+  List<String> colorroof = ['สีซิงค์', 'สีน้ำเงิน', 'สีเเดงมั่งมี','สีฟ้าทะเล','สีเเดงสด','สีเขียวสด','สีเขียวร็อคเก็ต','สีส้มเเสด','สีดำ','สีน้ำตาล','สีขาว','สีเทา','สีครีม','สีเหลือง'];
+  List<String> sizeroof = ['0.40','0.35','0.30','0.28','0.25','0.23','0.20',];
   List<String> numbers = List.generate(100, (index) => (index + 1).toString());
 
   String? _selectedRoofType;
@@ -490,7 +490,7 @@ class _AddorderState extends State<Addroof> {
                 ),
                 Container(
                   width: 220,
-                  height: 45,
+                 
                   child: TextFormField(
                     controller: widget._note_roofController,
                     keyboardType: TextInputType.emailAddress,
