@@ -34,14 +34,14 @@ class MyWidget extends StatelessWidget {
               ), // ไอคอนบวก
             )
           : Text(""),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: SizedBox(
-        height: 70,
+        height: 60,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              height: 180,
+              height: 130,
             ),
             Text(
               "By s.charoen",

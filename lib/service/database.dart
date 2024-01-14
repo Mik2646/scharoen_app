@@ -60,7 +60,7 @@ class Employeeall {
   Employeeall._();
   Stream<List<Employee>> getEmployeeall() {
     final reference = FirebaseFirestore.instance.collection('employee');
-    Query query = reference.orderBy('id', descending: false);
+    Query query = reference.orderBy('status', descending: true);
     final Snapshot = query.snapshots();
     return Snapshot.map((Snapshot) {
       return Snapshot.docs.map((doc) {
