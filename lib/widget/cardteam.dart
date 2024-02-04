@@ -58,10 +58,19 @@ class CardTeam extends StatelessWidget {
                                       width: 56,
                                       height: 55,
                                       decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              "https://cdn-icons-png.flaticon.com/128/848/848043.png"),
-                                          fit: BoxFit.fill,
+                                        shape: BoxShape
+                                            .circle, // กำหนดให้รูปทรงเป็นวงกลม
+                                        border: Border.all(
+                                          color: Colors.grey, // สีของกรอบ
+                                          width: 1.5, // ความหนาของกรอบ
+                                        ),
+                                      ),
+                                      child: ClipOval(
+                                        child: Image.network(
+                                          "${snapshot.data![index].imageUrl}",
+                                          width: 50,
+                                          height: 109,
+                                          fit: BoxFit.cover, // ให้ภาพไม่ถูกบีบ
                                         ),
                                       ),
                                     ),
@@ -141,27 +150,26 @@ class CardTeam extends StatelessWidget {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     Teamdetail(
-                                                        role: role,
-                                                        emId: snapshot
-                                                            .data![index].id,
-                                                        Firstname: snapshot
-                                                            .data![index]
-                                                            .firstname,
-                                                        Lastname: snapshot
-                                                            .data![index]
-                                                            .lastname,
-                                                        Email: snapshot
-                                                            .data![index].email,
-                                                        Phone: snapshot
-                                                            .data![index].phone,
-                                                        Address: snapshot
-                                                            .data![index]
-                                                            .address,
-                                                        Role: snapshot
-                                                            .data![index].role,
-                                                        Status: snapshot
-                                                            .data![index]
-                                                            .status),
+                                                  role: role,
+                                                  emId:
+                                                      snapshot.data![index].id,
+                                                  Firstname: snapshot
+                                                      .data![index].firstname,
+                                                  Lastname: snapshot
+                                                      .data![index].lastname,
+                                                  Email: snapshot
+                                                      .data![index].email,
+                                                  Phone: snapshot
+                                                      .data![index].phone,
+                                                  Address: snapshot
+                                                      .data![index].address,
+                                                  Role: snapshot
+                                                      .data![index].role,
+                                                  Status: snapshot
+                                                      .data![index].status,
+                                                  imgUrll: snapshot
+                                                      .data![index].imageUrl,
+                                                ),
                                               ),
                                             );
                                           },
@@ -173,21 +181,21 @@ class CardTeam extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Positioned(
-                            left: 49,
-                            top: 13,
-                            child: Container(
-                              width: 25,
-                              height: 25,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                      "https://cdn-icons-png.flaticon.com/128/9220/9220257.png"),
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Positioned(
+                          //   left: 49,
+                          //   top: 13,
+                          //   child: Container(
+                          //     width: 25,
+                          //     height: 25,
+                          //     decoration: BoxDecoration(
+                          //       image: DecorationImage(
+                          //         image: NetworkImage(
+                          //             "https://cdn-icons-png.flaticon.com/128/9220/9220257.png"),
+                          //         fit: BoxFit.fill,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -213,6 +221,7 @@ class Teamdetail extends StatelessWidget {
   final String? Phone;
   final String? Address;
   final String? Role;
+  final String? imgUrll;
 
   final bool? Status;
   Teamdetail(
@@ -225,7 +234,8 @@ class Teamdetail extends StatelessWidget {
       this.role,
       this.Address,
       this.Role,
-      this.Status});
+      this.Status,
+      this.imgUrll});
 
   @override
   Widget build(BuildContext context) {
@@ -243,29 +253,21 @@ class Teamdetail extends StatelessWidget {
                 Stack(
                   children: [
                     Container(
-                      width: 86,
-                      height: 85,
+                      width: 105,
+                      height: 105,
                       decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            "https://cdn-icons-png.flaticon.com/128/848/848043.png",
-                          ),
-                          fit: BoxFit.fill,
+                        shape: BoxShape.circle, // กำหนดให้รูปทรงเป็นวงกลม
+                        border: Border.all(
+                          color: Colors.grey, // สีของกรอบ
+                          width: 1.5, // ความหนาของกรอบ
                         ),
                       ),
-                    ),
-                    Positioned(
-                      left: 59,
-                      top: -2,
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                "https://cdn-icons-png.flaticon.com/128/9220/9220257.png"),
-                            fit: BoxFit.fill,
-                          ),
+                      child: ClipOval(
+                        child: Image.network(
+                          "${imgUrll}}",
+                          // width: 70,
+                          // height: 130,
+                          fit: BoxFit.cover, // ให้ภาพไม่ถูกบีบ
                         ),
                       ),
                     ),

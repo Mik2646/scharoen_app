@@ -8,7 +8,7 @@ class Employee {
    String? address;
    String? phone;
    String? role;
-   File? imageUrl;
+   String? imageUrl;
    bool? status;
    DateTime? dateTime;
 
@@ -54,9 +54,7 @@ class Employee {
        dateTime: employee['dateTime'] != null
           ? DateTime.fromMillisecondsSinceEpoch(employee['dateTime'])
           : null,
-      imageUrl: employee['imageUrl'] != null
-          ? File(employee['imageUrl'])
-          : null,
+     imageUrl:employee['profile_img']
   
     );
   }

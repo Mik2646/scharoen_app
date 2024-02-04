@@ -46,6 +46,8 @@ class _ProfileState extends State<Profile> {
           empoly?.firstname = element['name'];
           empoly?.phone = element['phone'];
           empoly?.address = element['address'];
+          empoly?.imageUrl = element['profile_img']
+          ;
         });
       }
     });
@@ -90,12 +92,25 @@ class _ProfileState extends State<Profile> {
             SizedBox(
               height: 20,
             ),
-            CircleAvatar(
-              backgroundColor: const Color.fromARGB(31, 255, 255, 255),
-              radius: 50,
-              backgroundImage: NetworkImage(
-                  "https://cdn-icons-png.flaticon.com/128/848/848043.png"),
-            ),
+         CircleAvatar(
+  backgroundColor: const Color.fromARGB(31, 255, 255, 255),
+  radius: 50,
+  backgroundImage: NetworkImage("${empoly?.imageUrl}"),
+  // ใส่กรอบ
+  foregroundColor: Colors.black, // สีของกรอบ
+  child: Container(
+    width: double.infinity,
+    height: double.infinity,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      border: Border.all(
+        color: Colors.grey, // สีของกรอบ
+        width: 1.5, // ความหนาของกรอบ
+      ),
+    ),
+  ),
+),
+
             SizedBox(height: 16),
             Text(
               "${empoly?.firstname} ${empoly?.lastname}",

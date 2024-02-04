@@ -1,12 +1,60 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class AddUserScreen extends StatefulWidget {
-  @override
+  String? employeeId;
   _AddUserScreenState createState() => _AddUserScreenState();
 }
 
 class _AddUserScreenState extends State<AddUserScreen> {
+  
+  bool isChecked = false;
+  PlatformFile? profileImg;
+  UploadTask? uploadTask;
+  String? imageUrl;
+  CollectionReference? employee =
+      FirebaseFirestore.instance.collection("employee");
+
+  Future selectFile() async {
+    final img = await FilePicker.platform.pickFiles();
+    if (img == null) return;
+    setState(() {
+      profileImg = img.files.first;
+    });
+  }
+
+  Future<void> updateImage(String? imageurl) async {
+    await employee?.where("id", isEqualTo: widget.employeeId).get().then((value) {
+      for (var element in value.docs) {
+        if (element.exists) {
+          employee
+              ?.doc(element.id)
+              .update({"profileImg": imageurl});
+        } else {
+          return;
+        }
+      }
+    });
+  }
+
+  Future<void> uploadImage() async {
+    if (profileImg == null) return;
+    final path = "image/${profileImg?.name}";
+    final file = File(profileImg!.path!);
+    final ref = FirebaseStorage.instance.ref().child(path);
+    uploadTask = ref.putFile(file);
+    final snapshot = await uploadTask?.whenComplete(() {});
+    final imgUrl = await snapshot!.ref.getDownloadURL();
+    setState(() {
+      imageUrl = imgUrl.toString();
+    });
+    await updateImage(imageUrl);
+  }
+
   TextEditingController? _nameController = TextEditingController();
   TextEditingController? _lastnameController = TextEditingController();
   TextEditingController? _emailController = TextEditingController();
@@ -43,12 +91,49 @@ class _AddUserScreenState extends State<AddUserScreen> {
         padding: const EdgeInsets.all(36.0),
         child: ListView(
           children: [
-            Image.network(
-              "https://cdn-icons-png.flaticon.com/128/10613/10613746.png",
-              width: 50,
-              height: 50,
-              color: Colors.grey,
+            Container(
+                width: 50,
+                height: 109,
+                decoration: BoxDecoration(
+              shape: BoxShape.circle, // กำหนดให้รูปทรงเป็นวงกลม
+              color: const Color.fromARGB(255, 255, 255, 255), // สีของวงกลม
+              image: DecorationImage(
+                      image: FileImage(File(profileImg != null
+                          ? "${profileImg!.path}"
+                          : "images/logoscaroen.png"))),
+                           border: Border.all(
+                color: Colors.black, // สีของกรอบ
+                width: 1.0, // ความหนาของกรอบ
+              ),
+                  // color: Colors.white,
             ),
+                // decoration: ShapeDecoration(
+                  
+                  
+                //   shape: RoundedRectangleBorder(
+                //     side: BorderSide(width: 1, color: Color(0xFFABABAB)),
+                //     borderRadius: BorderRadius.circular(10),
+                //   ),
+                // ),
+             
+                  child: Container(
+              
+                    child:
+                      IconButton(
+                        icon: Image.network(
+                          'https://cdn-icons-png.flaticon.com/128/3586/3586712.png',
+                          width: 37,
+                          height: 37,
+                          color: Color.fromARGB(255, 135, 135, 135),
+                        ),
+                        onPressed: () async {
+                          await selectFile();
+                        },
+                      ),
+                    
+                  ),
+                
+              ),
             TextField(
               controller: _nameController,
               decoration: InputDecoration(labelText: 'ชื่อ'),
@@ -103,8 +188,9 @@ class _AddUserScreenState extends State<AddUserScreen> {
             _buildSwitch('สถานะ', _status),
             SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_validateFields()) {
+                  await uploadImage();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: Colors.black26,
